@@ -153,8 +153,8 @@
   font-weight: 500;
 }
 .wolinet-tier-badge.secondary {
-  background: color-mix(in srgb, var(--muted) 18%, transparent);
-  color: var(--muted);
+  background: color-mix(in srgb, #38bdf8 15%, transparent);
+  color: #38bdf8;
 }
 .wolinet-tier-item p {
   margin: 0;
