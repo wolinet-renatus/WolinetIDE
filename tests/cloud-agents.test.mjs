@@ -22,8 +22,8 @@ test('the Cloud section lists connected providers only, then setup', () => {
 });
 
 test('only Claude Code relays, Codex and OpenCode run in the cloud', () => {
-  for (const id of ['claude', 'glm', 'mimo', 'codex', 'opencode']) assert.equal(harnessRefusal(id, id), '');
-  assert.match(harnessRefusal('kimi', 'Kimi'), /^Kimi can’t run on a cloud machine yet\. Choose Claude Code, GLM, MiMo, Codex or OpenCode\.$/);
+  for (const id of ['wolinet', 'claude', 'glm', 'mimo', 'codex', 'opencode']) assert.equal(harnessRefusal(id, id), '');
+  assert.match(harnessRefusal('kimi', 'Kimi'), /^Kimi can’t run on a cloud machine yet\.$/);
 });
 
 test('stages read as short phrases; busy ones spin', () => {

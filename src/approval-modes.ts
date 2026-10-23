@@ -6,7 +6,9 @@ export interface ApprovalMode { id: Mode; label: string; description: string; ic
 export function approvalModes(provider: ProviderId): ApprovalMode[] {
   // omp is a Pi fork driven through the same bridge, so it shares Pi's policy.
   const pi = provider === 'pi' || provider === 'omp' ? (provider === 'omp' ? 'omp' : 'Pi') : '';
-  const standard: ApprovalMode = { id: 'ask', label: 'Standard', icon: 'check', description: provider === 'codex'
+  const standard: ApprovalMode = { id: 'ask', label: 'Standard', icon: 'check', description: provider === 'wolinet'
+    ? 'Work autonomously in this workspace. Ask you before executing actions requiring confirmation.'
+    : provider === 'codex'
     ? 'Work in this project. Ask you when an action needs extra permission.'
     : provider === 'github-copilot'
     ? 'Use Copilot Agent mode with Allow All off. PandaCode asks before permission requests.'
@@ -21,7 +23,9 @@ export function approvalModes(provider: ProviderId): ApprovalMode[] {
     : provider === 'muse'
     ? 'Muse asks before actions its rules do not allow. Its own reviewer may approve low-risk ones.'
     : 'Use the harness’s normal rules. Ask you when approval is needed.' };
-  const full: ApprovalMode = { id: 'full', label: 'Full access', icon: 'unlock', description: provider === 'antigravity'
+  const full: ApprovalMode = { id: 'full', label: 'Full access', icon: 'unlock', description: provider === 'wolinet'
+    ? 'Run autonomous agent tools and edits freely without approval interruptions.'
+    : provider === 'antigravity'
     ? 'Automatically approve permission requests. Server restrictions still apply.'
     : provider === 'codex'
     ? 'Skip approval prompts and sandbox limits. Allow file and network access.'
@@ -45,7 +49,7 @@ export function approvalModes(provider: ProviderId): ApprovalMode[] {
     ? { id: 'auto', label: 'Accept edits', icon: 'edit', description: 'Work freely inside the sandbox. Muse asks only to leave it.' }
     : provider === 'deepseek'
     ? { id: 'auto', label: 'Accept edits', icon: 'edit', description: 'Like Standard, and edits outside this project are approved too. Other actions still ask.' }
-    : ['claude', 'glm', 'mimo', 'opencode', 'grok', 'pi', 'omp', 'commandcode', 'cline'].includes(provider)
+    : ['wolinet', 'claude', 'glm', 'mimo', 'opencode', 'grok', 'pi', 'omp', 'commandcode', 'cline'].includes(provider)
     ? { id: 'auto', label: 'Accept edits', icon: 'edit', description: 'Allow file edits automatically. Other actions may still ask you.' }
     : provider === 'kimi'
     ? { id: 'auto', label: 'Ask when needed', icon: 'spark', description: 'Allow routine tools automatically. Ask you about sensitive actions.' }

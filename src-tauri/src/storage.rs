@@ -994,6 +994,7 @@ impl Store {
     ) -> Result<Session> {
         self.project(project_id)?;
         if ![
+            "wolinet",
             "claude",
             "codex",
             "kimi",
@@ -1178,6 +1179,7 @@ impl Store {
     ) -> Result<Session> {
         crate::architect::check_manual(self, sid)?;
         if ![
+            "wolinet",
             "claude",
             "codex",
             "kimi",
@@ -1697,7 +1699,8 @@ fn handoff_from_provider(content: &str) -> Option<String> {
     let known = |provider: &str| {
         matches!(
             provider,
-            "claude"
+            "wolinet"
+                | "claude"
                 | "codex"
                 | "kimi"
                 | "opencode"

@@ -24,12 +24,12 @@ const sampleTestOutput = 'PASS src/components/search.test.ts\n  ✓ filters resu
 function encodeTool(tool: ToolActivity): string { return JSON.stringify({ type: 'tool_activity', version: 1, ...tool }); }
 let projects: Project[] = [{ id: 'project-1', name: 'orbit', path: '/Users/you/Projects/orbit' }, { id: 'project-2', name: 'pandacode', path: '/Users/you/Projects/pandacode' }];
 let sessions: Session[] = [
-  { id: 'session-1', projectId: 'project-1', title: 'Make search feel instant', provider: 'claude', model: 'sonnet', mode: 'ask', status: 'idle', createdAt: now - 420000, updatedAt: now, archived: false, worktreePath: null, resumeId: 'preview-session', lastResponseAt: now - 300000 },
-  { id: 'session-2', projectId: 'project-1', title: 'Refine the navigation', provider: 'codex', model: '', mode: 'ask', status: 'idle', createdAt: now - 8200000, updatedAt: now - 8000000, archived: false, worktreePath: null, resumeId: null, lastResponseAt: null },
-  { id: 'session-3', projectId: 'project-1', title: 'Add keyboard shortcuts', provider: 'kimi', model: '', mode: 'ask', status: 'idle', createdAt: now - 86400000, updatedAt: now - 86400000, archived: false, worktreePath: null, resumeId: null, lastResponseAt: null },
-  { id: 'session-4', projectId: 'project-2', title: 'Explore the project', provider: 'codex', model: '', mode: 'ask', status: 'idle', createdAt: now - 345600000, updatedAt: now - 172800000, archived: false, worktreePath: null, resumeId: null, lastResponseAt: now - 259200000 },
+  { id: 'session-1', projectId: 'project-1', title: 'Make search feel instant', provider: 'wolinet', model: 'wolinet-pro', mode: 'ask', status: 'idle', createdAt: now - 420000, updatedAt: now, archived: false, worktreePath: null, resumeId: 'preview-session', lastResponseAt: now - 300000 },
+  { id: 'session-2', projectId: 'project-1', title: 'Refine the navigation', provider: 'wolinet', model: 'wolinet-pro', mode: 'ask', status: 'idle', createdAt: now - 8200000, updatedAt: now - 8000000, archived: false, worktreePath: null, resumeId: null, lastResponseAt: null },
+  { id: 'session-3', projectId: 'project-1', title: 'Add keyboard shortcuts', provider: 'wolinet', model: 'wolinet-coder', mode: 'ask', status: 'idle', createdAt: now - 86400000, updatedAt: now - 86400000, archived: false, worktreePath: null, resumeId: null, lastResponseAt: null },
+  { id: 'session-4', projectId: 'project-2', title: 'Explore the project', provider: 'wolinet', model: 'wolinet-pro', mode: 'ask', status: 'idle', createdAt: now - 345600000, updatedAt: now - 172800000, archived: false, worktreePath: null, resumeId: null, lastResponseAt: now - 259200000 },
 ];
-if (typeof location !== 'undefined' && new URLSearchParams(location.search).has('trace')) sessions = [...sessions, { id: 'session-5', projectId: 'project-1', title: 'Polish the trace view', provider: 'claude', model: 'sonnet', mode: 'ask', status: 'idle', createdAt: now - 60000, updatedAt: now + 1000, archived: false, worktreePath: null, resumeId: null, lastResponseAt: now }];
+if (typeof location !== 'undefined' && new URLSearchParams(location.search).has('trace')) sessions = [...sessions, { id: 'session-5', projectId: 'project-1', title: 'Polish the trace view', provider: 'wolinet', model: 'wolinet-pro', mode: 'ask', status: 'idle', createdAt: now - 60000, updatedAt: now + 1000, archived: false, worktreePath: null, resumeId: null, lastResponseAt: now }];
 // The preview persists sidebar preferences only, never sample conversation data.
 const THREAD_ORDER_KEY = 'pandacode.preview.threadOrder';
 type ThreadOrder = { id: string; pinned: boolean; sidebarOrder: number | null };
@@ -107,21 +107,17 @@ const messages: Record<string, Message[]> = { ...(showTrace ? { 'session-5': tra
   { id: 8, sessionId: 'session-1', role: 'tool', content: 'Tool finished', createdAt: now - 270000 },
 ], 'session-4': [{ id: 6, sessionId: 'session-4', role: 'assistant', content: 'The project is a small native workspace for coding agents.', createdAt: now - 259200000 }] };
 const providers: Provider[] = [
-  { id: 'claude', name: 'Claude Code', installed: true, path: '/sample/bin/claude', version: 'Sample provider', models: ['sonnet', 'opus', 'haiku'].map(id => fallbackModel('claude', id)) },
-  { id: 'codex', name: 'Codex', installed: true, path: '/sample/bin/codex', version: 'Sample provider', models: [] },
-  { id: 'kimi', name: 'Kimi Code', installed: true, path: '/sample/bin/kimi', version: 'Sample provider', models: [] },
-  { id: 'opencode', name: 'OpenCode', installed: true, path: '/sample/bin/opencode', version: 'Sample provider', models: [] },
-  { id: 'glm', name: 'GLM Coding Plan', installed: true, path: '/sample/bin/claude', version: 'Sample provider', models: [] },
-  { id: 'antigravity', name: 'Antigravity', installed: false, path: null, version: '', models: [] },
-  { id: 'grok', name: 'Grok Build', installed: true, path: '/sample/bin/grok', version: 'grok 1.0.40 (sample)', models: [] },
-  { id: 'mimo', name: 'MiMo Token Plan', installed: true, path: '/sample/bin/claude', version: 'Sample provider', models: [] },
-  { id: 'pi', name: 'Pi', installed: true, path: '/sample/bin/pi', version: 'Sample provider', models: [] },
-  { id: 'deepseek', name: 'DeepSeek', installed: true, path: '/sample/bin/dsh', version: 'Sample provider', models: [] },
-  { id: 'commandcode', name: 'Command Code', installed: true, path: '/sample/bin/command-code', version: '1.87.1 (sample)', models: [] },
-  { id: 'cline', name: 'Cline', installed: true, path: '/sample/bin/cline', version: '3.0.73 (sample)', models: [] },
-  { id: 'omp', name: 'Oh My Pi', installed: false, path: null, version: '', models: [] },
-  { id: 'github-copilot', name: 'GitHub Copilot CLI', installed: true, path: '/sample/bin/copilot', version: 'GitHub Copilot CLI 1.0.82 (sample)', models: [] },
-  { id: 'muse', name: 'Muse Code', installed: true, path: '/sample/bin/muse', version: 'Muse Code 1.4.7 (sample)', models: [] },
+  {
+    id: 'wolinet',
+    name: 'Wolinet AI',
+    installed: true,
+    path: '/usr/local/bin/wolinet',
+    version: '1.0.0',
+    models: [
+      { id: 'wolinet-pro', name: 'Wolinet Pro', description: 'Flagship autonomous reasoning model.' },
+      { id: 'wolinet-coder', name: 'Wolinet Coder', description: 'Lightning-fast precision coding model.' },
+    ],
+  },
 ];
 // Mirrors providers::mimo::ENDPOINTS; the native side is the authority.
 const previewMimoEndpoints = [
@@ -146,13 +142,17 @@ function previewSaveConnection(input: { id?: string | null; provider: ProviderId
   return previewConnections;
 }
 // Representative catalog fixtures only; the native app queries installed harnesses.
-/** Another computer's smaller catalog (PandaCode Connect). */
-const remoteProviders = (): Provider[] => ['claude', 'codex'].map(id => providers.find(p => p.id === id)!).map(p => ({ ...p, models: remoteCatalog(p.id) }));
+/** Another computer's smaller catalog (WolinetIDE Connect). */
+const remoteProviders = (): Provider[] => ['wolinet'].map(id => providers.find(p => p.id === id)!).map(p => ({ ...p, models: remoteCatalog(p.id) }));
 function remoteCatalog(id: ProviderId): ProviderModel[] {
-  if (id === 'claude') return ['sonnet', 'opus'].map(model => fallbackModel('claude', model));
-  return id === 'codex' ? ['gpt-5-codex', 'gpt-5'].map(model => fallbackModel('codex', model)) : [];
+  if (id === 'wolinet') return catalogs.wolinet;
+  return [];
 }
 const catalogs: Record<ProviderId, ProviderModel[]> = {
+  wolinet: [
+    { id: 'wolinet-pro', name: 'Wolinet Pro', description: 'Flagship autonomous reasoning model.' },
+    { id: 'wolinet-coder', name: 'Wolinet Coder', description: 'Lightning-fast precision coding model.' },
+  ],
   pi: [{ id: 'anthropic/claude-sonnet-4-5', name: 'Claude Sonnet 4.5', description: 'Sample Pi model.', reasoningEfforts: [{ id: 'low', name: 'Low', description: '' }, { id: 'high', name: 'High', description: '' }], contextWindow: 200000 }],
   omp: [{ id: 'anthropic/claude-sonnet-4-5', name: 'Claude Sonnet 4.5', description: 'Sample omp model.', reasoningEfforts: [{ id: 'low', name: 'Low', description: '' }, { id: 'high', name: 'High', description: '' }], contextWindow: 200000 }],
   deepseek: [

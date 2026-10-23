@@ -67,7 +67,8 @@ const TOOL_INPUT_LIMIT: usize = 4096;
 const TOOL_OUTPUT_LIMIT: usize = 8192;
 const TOOL_CACHE_LIMIT: usize = 64;
 const PREVIEW_TRUNCATED: &str = "\n[Preview truncated]";
-const PROVIDERS: [(&str, &str); 15] = [
+const PROVIDERS: [(&str, &str); 16] = [
+    ("wolinet", "Wolinet AI"),
     ("claude", "Claude Code"),
     ("codex", "Codex"),
     ("kimi", "Kimi Code"),
@@ -614,14 +615,39 @@ pub fn discover() -> Vec<ProviderInfo> {
         ProviderInfo {
             id: id.into(),
             name: name.into(),
-            installed: path.is_some(),
-            version: if id == "antigravity" {
+            installed: if id == "wolinet" { true } else { path.is_some() },
+            version: if id == "wolinet" {
+                "1.0.0".into()
+            } else if id == "antigravity" {
                 "ACP".into()
             } else {
                 path.as_deref().and_then(version).unwrap_or_default()
             },
-            path: path.map(|p| p.to_string_lossy().into_owned()),
-            models: if id == "glm" {
+            path: if id == "wolinet" {
+                Some("/usr/local/bin/wolinet".into())
+            } else {
+                path.map(|p| p.to_string_lossy().into_owned())
+            },
+            models: if id == "wolinet" {
+                vec![
+                    ModelInfo {
+                        id: "wolinet-pro".into(),
+                        name: "Wolinet Pro".into(),
+                        description: "Flagship autonomous reasoning model.".into(),
+                        reasoning_efforts: vec![],
+                        default_reasoning_effort: None,
+                        context_window: Some(1_000_000),
+                    },
+                    ModelInfo {
+                        id: "wolinet-coder".into(),
+                        name: "Wolinet Coder".into(),
+                        description: "Lightning-fast precision coding model.".into(),
+                        reasoning_efforts: vec![],
+                        default_reasoning_effort: None,
+                        context_window: Some(256_000),
+                    },
+                ]
+            } else if id == "glm" {
                 glm::models()
             } else if id == "mimo" {
                 mimo::models()
@@ -641,6 +667,26 @@ pub fn discover() -> Vec<ProviderInfo> {
 /// On-demand metadata only: no user prompt or inference. ACP-only servers may
 /// create an empty session to advertise their scoped model options.
 pub async fn list_models(provider: &str) -> Result<Vec<ModelInfo>, String> {
+    if provider == "wolinet" {
+        return Ok(vec![
+            ModelInfo {
+                id: "wolinet-pro".into(),
+                name: "Wolinet Pro".into(),
+                description: "Flagship autonomous reasoning model.".into(),
+                reasoning_efforts: vec![],
+                default_reasoning_effort: None,
+                context_window: Some(1_000_000),
+            },
+            ModelInfo {
+                id: "wolinet-coder".into(),
+                name: "Wolinet Coder".into(),
+                description: "Lightning-fast precision coding model.".into(),
+                reasoning_efforts: vec![],
+                default_reasoning_effort: None,
+                context_window: Some(256_000),
+            },
+        ]);
+    }
     if provider == "opencode" {
         // A saved Settings selection narrows the picker; without one, list the
         // whole catalog like every other harness.
@@ -3132,6 +3178,15 @@ mod tests {
         assert_eq!(executable_name("github-copilot"), "copilot");
         assert!(validate_reasoning_effort("github-copilot", None).is_ok());
         assert!(validate_reasoning_effort("github-copilot", Some("high")).is_err());
+    }
+
+    #[tokio::test]
+    async fn wolinet_is_available_by_default_with_frontier_models() {
+        assert!(PROVIDERS.contains(&("wolinet", "Wolinet AI")));
+        let models = list_models("wolinet").await.unwrap();
+        assert_eq!(models.len(), 2);
+        assert_eq!(models[0].id, "wolinet-pro");
+        assert_eq!(models[1].id, "wolinet-coder");
     }
 
     pub(super) fn config(provider: &str) -> RunConfig {

@@ -1,5 +1,4 @@
 import './settings.css';
-import { mountProviderReadiness } from './provider-readiness';
 import { escape, icon } from './dom';
 import { providerLogo } from './provider-logos';
 import { uiSizeControls } from './ui-size';
@@ -57,7 +56,7 @@ export interface SettingsView { show(section: SettingsSection): void; dispose():
 export const SECTIONS: { id: SettingsSection; label: string; icon: string; description: string }[] = [
   { id: 'general', label: 'General', icon: 'settings', description: 'Text size, conversation density and the quick launcher.' },
   { id: 'appearance', label: 'Appearance', icon: 'sun', description: 'Theme, accent colors and wallpapers.' },
-  { id: 'agents', label: 'Agents', icon: 'bot', description: 'Your default agent, installed agents and their models.' },
+  { id: 'agents', label: 'Agents & Automation', icon: 'bot', description: 'Autonomous agent behavior, default models, and automated checks.' },
   { id: 'providers', label: 'Wolinet AI', icon: 'server', description: 'Account, subscription, and model access powered by Wolinet AI.' },
   { id: 'teams', label: 'Agent teams', icon: 'grid', description: 'Named teams of models, and the classic team setup.' },
   { id: 'tools', label: 'Tools & add-ons', icon: 'widget', description: 'App tools, MCP servers, skills and Jev.' },
@@ -83,16 +82,10 @@ function sectionHtml(id: SettingsSection, options: SettingsOptions): string {
       <h3 class="settings-heading">Colors <small class="settings-colors-summary">${escape(colorsSummary())}</small></h3><div class="settings-embed" data-embed="colors"></div>
       <h3 class="settings-heading">Wallpapers</h3><div class="settings-embed" data-embed="wallpapers"></div>`;
     case 'agents': return `<div class="settings-group">
-        <div class="setting-row settings-default-row"><div><strong>Default agent</strong><small>Used for new tasks.</small></div><button type="button" id="default-provider" class="settings-select" data-action="default-provider" aria-label="Default agent for new tasks" aria-haspopup="dialog" aria-expanded="false">${providerLogo(options.defaultProvider)}<span>${escape(defaultName)}</span>${icon('down')}</button></div>
-        <div class="setting-row settings-default-row"><div><strong>Default model</strong><small>Used for new tasks.</small></div><button type="button" id="default-model" class="settings-select" data-action="default-model" aria-label="Default model for new tasks" aria-haspopup="dialog" aria-expanded="false"><span>${escape(options.defaultModel)}</span>${icon('down')}</button></div>
-        <div class="setting-row"><div><strong>Agent updates</strong><small>Keep installed agents up to date.</small></div><button type="button" class="secondary-button" data-action="agent-updates" aria-haspopup="dialog">Check updates</button></div>
-        ${switchRow('turn-checks', 'Project checks after turns', 'When a turn ends, runs the project’s own test or check command with your environment (your shell, PATH and credentials); a failure queues one fix.', options.turnChecks)}
-      </div>
-      <div class="settings-heading settings-agents-heading"><h3>Installed agents</h3><button type="button" class="settings-refresh">${icon('refresh')}Refresh agents</button></div>
-      <div class="settings-provider-status" role="status" hidden></div>
-      <div class="provider-diagnostics settings-group"></div>
-      ${options.preview ? '<p class="settings-preview-note">Browser preview · sample agent availability.</p>' : ''}
-      <h3 class="settings-heading">OpenCode models</h3><div class="settings-embed" data-embed="openCodeModels"></div>`;
+        <div class="setting-row settings-default-row"><div><strong>Default model</strong><small>Preferred frontier model for new tasks.</small></div><button type="button" id="default-model" class="settings-select" data-action="default-model" aria-label="Default model for new tasks" aria-haspopup="dialog" aria-expanded="false"><span>${escape(options.defaultModel)}</span>${icon('down')}</button></div>
+        ${switchRow('turn-checks', 'Automated turn checks', 'Runs fast project tests after every completed turn and automatically queues a fix if an error is detected.', options.turnChecks)}
+        ${switchRow('expand-tool-activity', 'Expand agent activity', 'Show detailed step execution expanded by default.', options.activityExpanded)}
+      </div>`;
     case 'providers': return '<div class="settings-embed" data-embed="providerConnections"></div>';
     case 'teams': return '<div id="agent-teams-settings"></div>';
     case 'tools': return `<div class="settings-group">
@@ -124,14 +117,14 @@ export function mountSettings(host: HTMLElement, options: SettingsOptions): Sett
   const mounted = new Set<SettingsSection>();
   let disposed = false;
 
-  const list = host.querySelector<HTMLElement>('.provider-diagnostics')!;
-  const refreshButton = host.querySelector<HTMLButtonElement>('.settings-refresh')!;
-  const status = host.querySelector<HTMLElement>('.settings-provider-status')!;
+  const list = host.querySelector<HTMLElement>('.provider-diagnostics');
+  const refreshButton = host.querySelector<HTMLButtonElement>('.settings-refresh');
+  const status = host.querySelector<HTMLElement>('.settings-provider-status');
   let pending = false, discovered = false;
-  const readinessCleanup: (() => void)[] = [];
   const live = () => !disposed && host.isConnected && !host.hidden;
 
   function updateProviders(providers: Provider[]): void {
+    if (!list) return;
     const rows = new Map(Array.from(list.querySelectorAll<HTMLDetailsElement>('details')).map(row => [row.dataset.provider!, row]));
     for (const [index, provider] of providers.entries()) {
       let row = rows.get(provider.id);
@@ -140,23 +133,19 @@ export function mountSettings(host: HTMLElement, options: SettingsOptions): Sett
         row.className = 'provider-diagnostic'; row.dataset.provider = provider.id;
         row.innerHTML = `<summary aria-label="${escape(provider.name)} details"><span class="provider-avatar ${provider.id}">${providerLogo(provider.id)}</span><strong></strong><span class="provider-availability"><span class="status-dot"></span><span class="settings-installed"></span></span>${icon('chevron')}</summary><div class="settings-provider-details"><span>Version</span><span class="settings-provider-version"></span><span>Location</span><code></code></div>`;
       }
-      if (provider.id === 'antigravity' && !row.querySelector('.provider-readiness')) {
-        const check = document.createElement('div');
-        row.append(check); readinessCleanup.push(mountProviderReadiness(check));
-      }
       row.querySelector('strong')!.textContent = provider.name;
       row.querySelector('summary')!.setAttribute('aria-label', `${provider.name} details, ${provider.installed ? 'Installed' : 'Not installed'}`);
       row.querySelector('.provider-availability')!.classList.toggle('available', provider.installed);
-      row.querySelector('.settings-installed')!.textContent = provider.installed ? (provider.id === 'antigravity' ? 'ACP installed' : 'Installed') : 'Not installed';
+      row.querySelector('.settings-installed')!.textContent = provider.installed ? 'Installed' : 'Not installed';
       row.querySelector('.settings-provider-version')!.textContent = provider.version || 'Not reported';
-      row.querySelector('code')!.textContent = provider.path || 'Install the agent, then refresh.';
+      row.querySelector('code')!.textContent = provider.path || '';
       if (list.children[index] !== row) list.insertBefore(row, list.children[index] ?? null);
       rows.delete(provider.id);
     }
     rows.forEach(row => row.remove());
   }
   async function refresh(): Promise<void> {
-    if (!live() || pending) return;
+    if (!live() || pending || !refreshButton || !status) return;
     pending = true; refreshButton.disabled = true;
     status.hidden = false; status.textContent = 'Checking agents…';
     try {
@@ -248,19 +237,19 @@ export function mountSettings(host: HTMLElement, options: SettingsOptions): Sett
     const next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : (index + (event.key === 'ArrowDown' ? 1 : -1) + tabs.length) % tabs.length;
     show(tabs[next].dataset.section as SettingsSection, true);
   };
-  updateProviders(options.providers);
+  if (list) updateProviders(options.providers);
   host.addEventListener('click', click);
   host.addEventListener('keydown', keydown);
-  refreshButton.addEventListener('click', refresh);
+  refreshButton?.addEventListener('click', refresh);
   show(options.section ?? 'general', true);
   return {
     show: id => show(id, true),
     dispose: () => {
       if (disposed) return;
-      disposed = true; readinessCleanup.forEach(cleanup => cleanup());
+      disposed = true;
       cleanups.forEach(cleanup => cleanup());
       host.removeEventListener('click', click); host.removeEventListener('keydown', keydown);
-      refreshButton.removeEventListener('click', refresh);
+      refreshButton?.removeEventListener('click', refresh);
       host.replaceChildren(); host.classList.remove('settings-page-root');
     },
   };

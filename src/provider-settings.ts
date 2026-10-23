@@ -37,7 +37,7 @@ export function mountProviderSettings(
           <span class="wolinet-badge-icon">${icon('bot')}</span>
           <div>
             <h3>Wolinet AI</h3>
-            <span class="wolinet-gateway-url">${currentGateway === GATEWAY_DEFAULT ? 'Wolinet Cloud · Global' : 'Wolinet Cloud · Standard'}</span>
+            <span class="wolinet-gateway-url">${currentGateway === GATEWAY_DEFAULT ? 'Wolinet Cloud · Global Network' : 'Wolinet Cloud · Enterprise Network'}</span>
           </div>
         </div>
         <span class="wolinet-status-pill"><span class="wolinet-status-dot"></span> Connected</span>
@@ -78,8 +78,8 @@ export function mountProviderSettings(
         <label for="wolinet-endpoint-select">Cloud Region</label>
         <div class="connection-select">
           <select id="wolinet-endpoint-select">
-            <option value="${GATEWAY_DEFAULT}" ${currentGateway === GATEWAY_DEFAULT ? 'selected' : ''}>Global (lango.wolinet.com)</option>
-            <option value="${GATEWAY_FALLBACK}" ${currentGateway === GATEWAY_FALLBACK ? 'selected' : ''}>Standard (ai.wolinet.com)</option>
+            <option value="${GATEWAY_DEFAULT}" ${currentGateway === GATEWAY_DEFAULT ? 'selected' : ''}>Global Cloud Network (Recommended)</option>
+            <option value="${GATEWAY_FALLBACK}" ${currentGateway === GATEWAY_FALLBACK ? 'selected' : ''}>Enterprise Cloud Network</option>
           </select>
         </div>
       </div>
@@ -206,7 +206,7 @@ export function mountProviderSettings(
     const chosen = endpointSelect.value;
     localStorage.setItem('wolinet_gateway_endpoint', chosen);
     const urlLabel = host.querySelector<HTMLElement>('.wolinet-gateway-url');
-    if (urlLabel) urlLabel.textContent = chosen === GATEWAY_DEFAULT ? 'Wolinet Cloud · Global' : 'Wolinet Cloud · Standard';
+    if (urlLabel) urlLabel.textContent = chosen === GATEWAY_DEFAULT ? 'Wolinet Cloud · Global Network' : 'Wolinet Cloud · Enterprise Network';
     message(`Cloud region updated.`);
   };
 

@@ -83,7 +83,7 @@
 .wolinet-gateway-url {
   font-size: 0.74rem;
   color: var(--muted);
-  font-family: var(--mono, ui-monospace, monospace);
+  font-weight: 500;
 }
 .wolinet-status-pill {
   display: inline-flex;

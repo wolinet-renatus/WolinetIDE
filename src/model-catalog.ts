@@ -3,15 +3,17 @@ import type { ContextUsage, ProviderId, ProviderModel } from './types';
 /** Unknown IDs stay literal; never infer a version from a moving alias. */
 export function fallbackModel(provider: ProviderId, id = 'default'): ProviderModel {
   id ||= 'default';
-  if (id === 'default' && provider === 'glm') return { id, name: 'GLM-5.3', description: 'Default Z.AI Coding Plan model via Claude Code.' };
-  if (id === 'default' && provider === 'mimo') return { id, name: 'MiMo-V2.6-Pro', description: 'Default MiMo Token Plan model via Claude Code.' };
-  if (id === 'default') return { id, name: 'Default', description: 'Uses the model selected by your harness.' };
-  const alias = provider === 'claude' ? ({ sonnet: 'Claude Sonnet', opus: 'Claude Opus', haiku: 'Claude Haiku' } as Record<string, string>)[id] : '';
-  return { id, name: alias || id, description: alias ? 'Version resolved by Claude Code.' : '' };
+  if (id === 'wolinet-coder') return { id: 'wolinet-coder', name: 'Wolinet Coder', description: 'Lightning-fast precision coding model.' };
+  if (provider === 'wolinet' || id === 'default') {
+    return { id: 'wolinet-pro', name: 'Wolinet Pro', description: 'Flagship autonomous reasoning model.' };
+  }
+  return { id, name: id, description: '' };
 }
 
 export function modelChoices(provider: ProviderId, catalog: ProviderModel[], current = ''): ProviderModel[] {
-  const models = new Map<string, ProviderModel>([['default', fallbackModel(provider)]]);
+  const models = new Map<string, ProviderModel>();
+  const def = fallbackModel(provider);
+  models.set(def.id, def);
   for (const model of catalog) if (model.id) models.set(model.id, model);
   if (current && !models.has(current)) models.set(current, fallbackModel(provider, current));
   return [...models.values()];

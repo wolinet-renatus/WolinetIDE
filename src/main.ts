@@ -95,7 +95,7 @@ const state = {
   git: null as GitStatus | null, jj: null as JjStatus | null, files: [] as FileEntry[], filePath: '', gitError: '', filesError: '', inspectorLoading: false,
   selectedFile: '', selectedContent: '', selectedKind: '' as '' | 'diff' | 'file', selectedStaged: false, filePreviewLoading: false,
   browserUrl: '',
-  attachments: [] as string[], drafts: new Map<string, string>(), defaultProvider: (localStorage.getItem('pandacode.defaultProvider') ?? localStorage.getItem('pandacode.provider') ?? 'claude') as ProviderId,
+  attachments: [] as string[], drafts: new Map<string, string>(), defaultProvider: (localStorage.getItem('wolinet.defaultProvider') ?? 'wolinet') as ProviderId,
   browserAttachments: new Map<string, BrowserAttachment[]>(),
   moodboardAttachments: new Map<string, { id: string; projectId: string; name: string }[]>(),
   generation: 0, hasOlder: false,
@@ -313,7 +313,7 @@ const github = createGithub({
   project: id => state.projects.find(p => p.id === id),
   defaultHarness: () => {
     const harness = state.providers.find(p => p.id === state.defaultProvider && p.installed) ?? state.providers.find(p => p.installed) ?? state.providers[0];
-    if (!harness) throw new Error('Open Settings to check your installed agents.');
+    if (!harness) throw new Error('Open Settings to configure Wolinet AI.');
     return { provider: harness.id, model: rememberedModel(harness.id) };
   },
   upsert: saved => { upsertSession(saved); pullView.forget(saved.id); },
@@ -699,7 +699,7 @@ function finishLiveMessage(current: Stream, sessionId: string): void {
   current.tools.push({ key: current.retainedMessageKey, content: current.text.length > 16384 ? current.text.slice(0, 16384) + '\n[Activity preview truncated]' : current.text, commentary: true });
   trimLiveActivity(current, sessionId); current.revision++;
 }
- function shortProvider(id: ProviderId): string { return ({ claude: 'Claude', codex: 'Codex', kimi: 'Kimi', opencode: 'OpenCode', glm: 'GLM', antigravity: 'Antigravity', grok: 'Grok', mimo: 'MiMo', pi: 'Pi', deepseek: 'DeepSeek', commandcode: 'Command Code', cline: 'Cline', omp: 'omp', 'github-copilot': 'GitHub Copilot CLI', muse: 'Muse Code' })[id]; }
+ function shortProvider(id: ProviderId): string { return ({ wolinet: 'Wolinet AI', claude: 'Claude', codex: 'Codex', kimi: 'Kimi', opencode: 'OpenCode', glm: 'GLM', antigravity: 'Antigravity', grok: 'Grok', mimo: 'MiMo', pi: 'Pi', deepseek: 'DeepSeek', commandcode: 'Command Code', cline: 'Cline', omp: 'omp', 'github-copilot': 'GitHub Copilot CLI', muse: 'Muse Code' })[id] ?? 'Wolinet AI'; }
 function selectedModel(s: Session): ProviderModel { return provider(s.provider)?.models.find(model => model.id === (s.model || 'default')) ?? fallbackModel(s.provider, s.model); }
 function modelLabel(s?: Session): string {
   if (!s) return 'Default model';
@@ -821,6 +821,10 @@ function beginMenuOpen(anchor: HTMLElement): { epoch: number; release: () => voi
   return { epoch, release };
 }
 function rememberedModel(id: ProviderId): string {
+  if (id === 'wolinet') {
+    const model = localStorage.getItem('wolinet.defaultModel') || localStorage.getItem('wolinet.model') || state.sessions.find(s => s.provider === id && s.model)?.model || 'wolinet-pro';
+    return model.length <= 200 ? model : 'wolinet-pro';
+  }
   const model = localStorage.getItem('pandacode.defaultModel.' + id) || localStorage.getItem('pandacode.model.' + id) || state.sessions.find(s => s.provider === id && s.model)?.model || 'default';
   return model.length <= 200 ? model : 'default';
 }
@@ -1652,7 +1656,7 @@ async function saveBoardTaskForm(form: HTMLFormElement, data: FormData): Promise
   if (id) saved = await call<Session>('update_task_details', { sessionId: id, title, description });
   else {
     const harness = state.providers.find(p => p.id === state.defaultProvider && p.installed) ?? state.providers.find(p => p.installed) ?? state.providers[0];
-    if (!harness) throw new Error('Open Settings to check your installed agents.');
+    if (!harness) throw new Error('Open Settings to configure Wolinet AI.');
     saved = await call<Session>('create_board_task', { projectId: form.dataset.projectId, provider: harness.id, model: rememberedModel(harness.id), mode: 'full', title, description });
   }
   const index = state.sessions.findIndex(s => s.id === saved.id);
@@ -3031,7 +3035,7 @@ async function createTask(projectId = state.projectId): Promise<void> {
   const generation = state.generation;
   const harness = state.providers.find(p => p.id === state.defaultProvider && p.installed)
     ?? state.providers.find(p => p.installed) ?? state.providers[0];
-  if (!harness) { notify('Open Settings to check your installed agents.'); return; }
+  if (!harness) { notify('Open Settings to configure Wolinet AI.'); return; }
   // An untouched draft is replaced so current defaults apply. Coming from elsewhere, a kept draft
   // (typed text or a worktree) is reopened; from inside one, New task starts another.
   const current = state.sessionId;
@@ -3054,7 +3058,7 @@ async function createChat(): Promise<void> {
   const generation = state.generation;
   const harness = state.providers.find(p => p.id === state.defaultProvider && p.installed)
     ?? state.providers.find(p => p.installed) ?? state.providers[0];
-  if (!harness) { notify('Open Settings to check your installed agents.'); return; }
+  if (!harness) { notify('Open Settings to configure Wolinet AI.'); return; }
   leaveDraft('');
   creatingTask = true;
   let created: Session;

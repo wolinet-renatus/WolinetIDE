@@ -27,10 +27,10 @@ export interface AgentUsage {
   dashboardUrl?: string | null;
 }
 
-const help = 'Reads account limits from your locally configured agent accounts. Requests go directly to the provider or its CLI, never through PandaCode servers. No prompts are sent. Results are cached for one minute; Refresh is limited to once every ten seconds per provider. Some providers do not expose their limits. Usage is shared with other apps using the same account.';
+const help = 'Reads account limits from your configured agent accounts. Requests go directly to the intelligence service, never through third-party servers. No prompts are sent. Results are cached for one minute; Refresh is limited to once every ten seconds. Usage is shared across your workspace sessions.';
 const STATUS: Record<AgentUsage['status'], string> = { ready: '', unavailable: 'Unavailable', signedOut: 'Sign-in needed', error: 'Unavailable', unsupported: 'Not exposed' };
 const RANGES: [Range, string][] = [['week', 'Week'], ['month', 'Month'], ['year', 'Year']];
-const shortNames: Partial<Record<ProviderId, string>> = { claude: 'Claude', glm: 'GLM', mimo: 'MiMo', kimi: 'Kimi', grok: 'Grok', pi: 'Pi', deepseek: 'DeepSeek', commandcode: 'Command Code', cline: 'Cline', omp: 'omp', 'github-copilot': 'Copilot', muse: 'Muse' };
+const shortNames: Partial<Record<ProviderId, string>> = { wolinet: 'Wolinet AI', claude: 'Claude', glm: 'GLM', mimo: 'MiMo', kimi: 'Kimi', grok: 'Grok', pi: 'Pi', deepseek: 'DeepSeek', commandcode: 'Command Code', cline: 'Cline', omp: 'omp', 'github-copilot': 'Copilot', muse: 'Muse' };
 type Tab = 'overview' | ProviderId;
 
 function validWindows(result: AgentUsage | undefined): UsageWindow[] {
@@ -42,7 +42,7 @@ function peak(result: AgentUsage | undefined): number | null {
 }
 function pricingNote(ledger: Ledger): string {
   const when = ledger.pricing.fetchedAt ? new Date(ledger.pricing.fetchedAt).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '';
-  return { live: `Prices: LiteLLM public price list, updated ${when}.`, saved: `Prices: saved LiteLLM price list from ${when}.`, bundled: 'Prices: the list bundled with PandaCode (offline).' }[ledger.pricing.source];
+  return { live: `Prices: Global model pricing index, updated ${when}.`, saved: `Prices: saved model pricing index from ${when}.`, bundled: 'Prices: standard pricing index (offline).' }[ledger.pricing.source];
 }
 
 /** Keeps keyboard focus on the same control when a section re-renders. */

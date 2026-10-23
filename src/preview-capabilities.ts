@@ -1,19 +1,13 @@
 import type { CacheAlignment, CapabilityEntry, CapabilityHarness, CapabilityInventory } from './capabilities-panel';
 
 const harnesses: CapabilityHarness[] = [
-  { id: 'claude', name: 'Claude Code' },
-  { id: 'codex', name: 'Codex' },
-  { id: 'kimi', name: 'Kimi Code' },
-  { id: 'opencode', name: 'OpenCode' },
+  { id: 'wolinet', name: 'Wolinet AI' },
 ];
 
 const entries: CapabilityEntry[] = [
-  { harness: 'claude', kind: 'slash command', name: '/review', state: 'native', source: 'Harness command catalog', command: null },
-  { harness: 'claude', kind: 'mcp server', name: 'Preview documentation', state: 'discovered', source: 'User config', command: 'node' },
-  { harness: 'claude', kind: 'hook', name: 'PreToolUse', state: 'discovered', source: 'Claude settings', command: null },
-  { harness: 'claude', kind: 'plugin', name: 'sample-review@local', state: 'discovered', source: 'Claude settings', command: null },
-  { harness: 'codex', kind: 'slash command', name: '/review', state: 'native', source: 'Harness command catalog', command: null },
-  { harness: 'codex', kind: 'skill', name: 'Project guidelines', state: 'discovered', source: 'User skills directory', command: null },
+  { harness: 'wolinet', kind: 'slash command', name: '/review', state: 'native', source: 'Wolinet AI command catalog', command: null },
+  { harness: 'wolinet', kind: 'mcp server', name: 'Documentation Index', state: 'discovered', source: 'Project configuration', command: 'node' },
+  { harness: 'wolinet', kind: 'skill', name: 'Project guidelines', state: 'discovered', source: 'Project skills directory', command: null },
 ];
 
 const inventory: CapabilityInventory = {
@@ -33,10 +27,7 @@ const inventory: CapabilityInventory = {
 const cache: CacheAlignment = {
   taskProvider: null,
   harnesses: [
-    { id: 'claude', name: 'Claude Code', instructionDelivery: 'cachedSystemPrompt', state: 'supported', cacheTokens: 'observed', cacheReadTokens: 54000, cacheCreationTokens: 1800, cacheTokenSource: 'Sample observed record' },
-    { id: 'codex', name: 'Codex', instructionDelivery: 'messageInjection', state: 'partial', cacheTokens: 'observed', cacheReadTokens: 12000, cacheCreationTokens: 0, cacheTokenSource: 'Sample observed record' },
-    { id: 'kimi', name: 'Kimi Code', instructionDelivery: 'messageInjection', state: 'partial', cacheTokens: 'not exposed', cacheReadTokens: null, cacheCreationTokens: null, cacheTokenSource: 'Not exposed' },
-    { id: 'opencode', name: 'OpenCode', instructionDelivery: 'messageInjection', state: 'partial', cacheTokens: 'not exposed', cacheReadTokens: null, cacheCreationTokens: null, cacheTokenSource: 'Not exposed' },
+    { id: 'wolinet', name: 'Wolinet AI', instructionDelivery: 'cachedSystemPrompt', state: 'supported', cacheTokens: 'observed', cacheReadTokens: 54000, cacheCreationTokens: 1800, cacheTokenSource: 'Sample observed record' },
   ],
 };
 

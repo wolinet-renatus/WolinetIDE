@@ -23,6 +23,9 @@ const logos: Partial<Record<ProviderId, string>> = {
 /** Decorative provider mark. The surrounding control supplies its accessible name. */
 export function providerLogo(id: ProviderId, cls = ''): string {
   const className = `provider-logo${cls ? ` ${escape(cls)}` : ''}`;
+  if (id === 'wolinet') {
+    return `<svg class="${className}" data-provider="wolinet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" width="20" height="20"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>`;
+  }
   // Monochrome marks are inlined and drawn in the theme's text color.
   const inline = id === 'github-copilot' ? githubCopilotLogo : id === 'cline' ? clineLogo.replaceAll('#1C1C24', 'currentColor') : '';
   if (inline) {
