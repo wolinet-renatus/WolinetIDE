@@ -45,7 +45,7 @@ test('packs ride along once, fold in the transcript, and the switch-off is said 
 
   await send(page, 'Fix the flaky search test');
   const first = (await sent(page)).at(-1)!;
-  expect(first.startsWith('Fix the flaky search test\n\nResponse style (PandaCode token saver')).toBe(true);
+  expect(first.startsWith('Fix the flaky search test\n\nResponse style (WolinetAi token saver')).toBe(true);
   expect(first).toContain('Telegraphic.');
   expect(first).toContain('least code that fully solves');
   // Folded behind the attached-context summary, not shown as what the user typed.

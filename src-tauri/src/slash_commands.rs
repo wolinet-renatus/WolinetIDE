@@ -535,7 +535,7 @@ fn action_command(name: &str, description: &str, action: &str, hint: Option<&str
         description: description.into(),
         argument_hint: hint.map(str::to_string),
         kind: "action".into(),
-        source: "PandaCode".into(),
+        source: "WolinetAi".into(),
         reason: None,
         invocation: Invocation::Action(action.into()),
     }
@@ -997,7 +997,7 @@ mod tests {
     #[test]
     fn snapshots_expose_local_controls_without_launching_a_harness() {
         let catalog = snapshot("antigravity", Path::new("/snapshot-only-project")).unwrap();
-        assert_eq!(command(&catalog, "/model").source, "PandaCode");
+        assert_eq!(command(&catalog, "/model").source, "WolinetAi");
         assert_eq!(command(&catalog, "/settings").kind, "action");
         assert!(snapshot("unknown", Path::new("/snapshot-only-project")).is_err());
     }
@@ -1158,7 +1158,7 @@ mod tests {
                 command(&value, name).invocation,
                 Invocation::Action(_)
             ));
-            assert_eq!(command(&value, name).source, "PandaCode");
+            assert_eq!(command(&value, name).source, "WolinetAi");
             assert!(resolve_from_catalog("claude", name, &value)
                 .unwrap()
                 .action

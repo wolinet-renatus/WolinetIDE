@@ -29,8 +29,8 @@ pub(crate) fn spec(name: &str, description: &str, properties: Value, required: &
 
 fn preview_catalog() -> Vec<Value> {
     vec![
-        spec("run_project", "Run this task's pandacode-run.sh in a managed PandaCode terminal and open its declared preview when ready. Reuses an already-running Run terminal. Requires this task to be visible and authorization to execute the script. Read/review the script before running it. Returns launch status, not test success; inspect the app separately.", json!({}), &[]),
-        spec("preview_file", "Open an HTML or SVG file from this task's checkout in PandaCode's browser. Use for static visual output after edits. Path must be relative to the checkout; requires this task to be visible. Opening a preview does not establish that tests passed.", json!({"path":{"type":"string","maxLength":4096}}), &["path"]),
+        spec("run_project", "Run this task's pandacode-run.sh in a managed WolinetAI terminal and open its declared preview when ready. Reuses an already-running Run terminal. Requires this task to be visible and authorization to execute the script. Read/review the script before running it. Returns launch status, not test success; inspect the app separately.", json!({}), &[]),
+        spec("preview_file", "Open an HTML or SVG file from this task's checkout in WolinetAI's browser. Use for static visual output after edits. Path must be relative to the checkout; requires this task to be visible. Opening a preview does not establish that tests passed.", json!({"path":{"type":"string","maxLength":4096}}), &["path"]),
     ]
 }
 
@@ -47,7 +47,7 @@ pub fn with_preview(base: Option<ToolHost>, app: tauri::AppHandle, session_id: S
         Box::pin(async move {
             if stopped.load(Ordering::SeqCst) { return Err("Task has stopped.".into()); }
             if !matches!(name.as_str(), "pandacode_run_project" | "pandacode_preview_file") {
-                return match base { Some(base) => (base.handler)(name, args).await, None => Err("Unknown PandaCode tool.".into()) };
+                return match base { Some(base) => (base.handler)(name, args).await, None => Err("Unknown WolinetAI tool.".into()) };
             }
             validate_spec(&preview_catalog(), &name, &args)?;
             // Task/project and file validation are repeated by native IPC when the
@@ -127,7 +127,7 @@ pub fn with_jev(
                 } else if let Some(base) = base {
                     (base.handler)(name, args).await
                 } else {
-                    Err("Unknown PandaCode tool.".into())
+                    Err("Unknown WolinetAI tool.".into())
                 }
             })
         }),
@@ -404,7 +404,7 @@ pub(crate) fn validate_spec(tools: &[Value], name: &str, args: &Value) -> Result
     let spec = tools
         .iter()
         .find(|t| t["name"] == name)
-        .ok_or("Unknown PandaCode tool.")?;
+        .ok_or("Unknown WolinetAI tool.")?;
     let object = args
         .as_object()
         .ok_or("Tool arguments must be an object.")?;

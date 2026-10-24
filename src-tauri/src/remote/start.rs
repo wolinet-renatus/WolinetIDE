@@ -14,8 +14,8 @@ const CLONE: Duration = Duration::from_secs(6 * 60);
 const FETCH: Duration = Duration::from_secs(90);
 const GIT: Duration = Duration::from_secs(15);
 pub(crate) const WORST_CASE: Duration = Duration::from_secs(6 * 60 + 90 + 8 * 15);
-/// Clones land in `~/PandaCode/<name>`.
-const CLONE_FOLDER: &str = "PandaCode";
+/// Clones land in `~/WolinetAi/<name>`.
+const CLONE_FOLDER: &str = "WolinetAi";
 
 #[derive(Debug, PartialEq)]
 pub(crate) struct Start {
@@ -231,9 +231,9 @@ mod tests {
     #[test]
     fn clones_take_the_first_free_folder() {
         let home = Path::new("/Users/me");
-        assert_eq!(clone_path(home, "orbit-labs/orbit", |_| false), PathBuf::from("/Users/me/PandaCode/orbit"));
-        let taken = [PathBuf::from("/Users/me/PandaCode/orbit"), PathBuf::from("/Users/me/PandaCode/orbit-2")];
-        assert_eq!(clone_path(home, "orbit-labs/orbit", |path| taken.iter().any(|t| t == path)), PathBuf::from("/Users/me/PandaCode/orbit-3"));
+        assert_eq!(clone_path(home, "orbit-labs/orbit", |_| false), PathBuf::from("/Users/me/WolinetAi/orbit"));
+        let taken = [PathBuf::from("/Users/me/WolinetAi/orbit"), PathBuf::from("/Users/me/WolinetAi/orbit-2")];
+        assert_eq!(clone_path(home, "orbit-labs/orbit", |path| taken.iter().any(|t| t == path)), PathBuf::from("/Users/me/WolinetAi/orbit-3"));
     }
 
     #[test]

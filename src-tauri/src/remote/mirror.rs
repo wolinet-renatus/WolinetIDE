@@ -149,7 +149,7 @@ async fn end_turn(app: &tauri::AppHandle, local: &str, successful: bool, stopped
         return;
     }
     if let Err(error) = sync(app, local).await {
-        eprintln!("PandaCode Connect: could not copy a remote task's messages: {error}");
+        eprintln!("Wolinet Connect: could not copy a remote task's messages: {error}");
     }
     finish(app, local, successful, stopped, text);
 }
@@ -172,7 +172,7 @@ fn finish(app: &tauri::AppHandle, local: &str, successful: bool, stopped: bool, 
     match lock(&app.state::<AppState>()).and_then(|store| finish_once(&store, local, successful, stopped)) {
         Ok(true) => {}
         Ok(false) => return,
-        Err(error) => eprintln!("PandaCode Connect: could not end a remote task's turn: {error}"),
+        Err(error) => eprintln!("Wolinet Connect: could not end a remote task's turn: {error}"),
     }
     let done = AgentEvent { session_id: local.to_owned(), kind: "done".into(), text: text.to_owned(), request_id: None, data: None, tool: None };
     let _ = app.emit("agent-event", done);
@@ -291,7 +291,7 @@ pub(crate) async fn subscribe_all(app: tauri::AppHandle) {
         }
         match client::call(&app, &device, "subscribe", json!({"sessionIds": sessions})).await {
             Ok(reply) => catch_up(&app, &device, reply["tasks"].as_array().map(Vec::as_slice).unwrap_or_default()).await,
-            Err(error) => eprintln!("PandaCode Connect: could not follow tasks on {}: {error}", super::device_label(&device)),
+            Err(error) => eprintln!("Wolinet Connect: could not follow tasks on {}: {error}", super::device_label(&device)),
         }
     }
 }

@@ -255,7 +255,13 @@ fn slug(name: &str, id: &str) -> String {
 }
 
 pub(crate) fn workspace_root() -> PathBuf {
-    crate::agent_usage_providers::home().unwrap_or_else(std::env::temp_dir).join("PandaCode Bots")
+    let base = crate::agent_usage_providers::home().unwrap_or_else(std::env::temp_dir);
+    let legacy = base.join("PandaCode Bots");
+    if legacy.exists() {
+        legacy
+    } else {
+        base.join("WolinetAi Bots")
+    }
 }
 
 pub(crate) fn get(store: &Store, id: &str) -> Result<Bot> {

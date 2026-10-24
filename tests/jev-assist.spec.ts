@@ -76,7 +76,7 @@ test('decisions opt in independently and missing Jev keys do not block normal ap
   await page.locator('#jev-decisions-enabled').check(); await page.locator('[data-jev-save]').click();
   await expect.poll(async()=> (await calls(page,'jev_save_configuration')).length).toBe(1);
   expect((await calls(page,'jev_save_configuration'))[0].args.settings).toMatchObject({enabled:false,decisionsEnabled:true});
-  await expect(page.locator('#dialog')).toContainText('PandaCode works without Jev or a TypeSafe key');
+  await expect(page.locator('#dialog')).toContainText('WolinetIDE works without Jev or a TypeSafe key');
 });
 
 test('saved diff evidence is previewed locally, escaped, and opens its original diff', async ({page}) => {

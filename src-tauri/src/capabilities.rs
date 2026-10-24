@@ -125,7 +125,7 @@ pub(crate) async fn capabilities_inventory(
                 catalog
                     .commands
                     .into_iter()
-                    .filter(|command| command.source != "PandaCode")
+                    .filter(|command| command.source != "WolinetAi" && command.source != "WolinetIDE" && command.source != "PandaCode")
                     .filter_map(|command| {
                         let name = safe_label(&command.name)?;
                         Some(CapabilityEntry {

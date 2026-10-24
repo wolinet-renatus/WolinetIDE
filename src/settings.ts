@@ -44,7 +44,7 @@ interface SettingsOptions {
   cloud?: CloudSettingsHost;
   /** Skills library and rules registry. */
   skills?: SkillsLibraryHost;
-  /** PandaCode Connect: sign-in, remote control and devices. */
+  /** Wolinet Connect: sign-in, remote control and devices. */
   remote?: RemoteHost;
   embed: { colors: Embed; wallpapers: Embed; providerConnections: Embed; openCodeModels: Embed };
   /** Leaves Settings for the workspace. */

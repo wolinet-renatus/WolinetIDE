@@ -4,7 +4,7 @@ import { accentTokens, vsixTokens, type Tokens, type VsixTheme } from './palette
 import { wallpaperAccents } from './wallpaper-accents';
 export type { VsixTheme } from './palette-core';
 
-/* The app's colors: PandaCode's own palette with an accent that is classic yellow,
+/* The app's colors: WolinetIDE's own palette with an accent that is classic yellow,
  * a fixed color, or drawn from the current wallpaper — or, when a VS Code theme is
  * active, that theme's colors, which then stay put whatever the wallpaper does. */
 

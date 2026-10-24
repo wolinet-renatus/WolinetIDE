@@ -130,7 +130,7 @@ pub(crate) async fn deliver(app: &tauri::AppHandle, inbound: Inbound) -> Result<
         Command::Message => {}
     }
     if bot.paused {
-        reply(app, &bot, &inbound.channel_id, &inbound.thread, &format!("{} is paused. Resume it in PandaCode to continue.", bot.name)).await;
+        reply(app, &bot, &inbound.channel_id, &inbound.thread, &format!("{} is paused. Resume it in WolinetAi to continue.", bot.name)).await;
         return Err("This bot is paused.".into());
     }
     let turn = {
@@ -190,7 +190,7 @@ pub(crate) async fn run_finished(app: &tauri::AppHandle, session_id: &str, succe
     if let Ok(mut map) = pending().lock() {
         map.remove(session_id);
     }
-    let text = if text.is_empty() && !successful { "I couldn't finish that. Check PandaCode for details.".to_owned() } else { text };
+    let text = if text.is_empty() && !successful { "I couldn't finish that. Check WolinetAi for details.".to_owned() } else { text };
     if thread.channel_id == "schedule" {
         if text.trim() == NOTHING || text.trim().is_empty() {
             if let Ok(store) = state.store.lock() {

@@ -84,12 +84,12 @@ pub fn blocks_in(text: &str) -> (Vec<String>, bool) {
 pub fn write_folder(dir: &Path, id: &str, files: &[(String, Vec<u8>)], previous: &[Written]) -> Result<Vec<Written>, String> {
     let target = dir.join(id);
     if target.exists() && previous.is_empty() {
-        return Err(format!("{} already exists and PandaCode did not create it.", target.display()));
+        return Err(format!("{} already exists and WolinetAi did not create it.", target.display()));
     }
     for written in previous {
         let path = Path::new(&written.path);
         if path.exists() && file_hash(path).as_deref() != Some(written.sha256.as_str()) {
-            return Err(format!("{} was edited on disk; PandaCode will not overwrite it.", written.path));
+            return Err(format!("{} was edited on disk; WolinetAi will not overwrite it.", written.path));
         }
     }
     for written in previous {
@@ -135,7 +135,7 @@ pub fn write_block(file: &Path, id: &str, body: &str, previous: Option<&Written>
     let next = match block(&text, id) {
         Some((current, range)) => {
             if previous.is_none_or(|p| sha256_hex(current.as_bytes()) != p.sha256) {
-                return Err(format!("The {id} block in {} was edited on disk; PandaCode will not overwrite it.", file.display()));
+                return Err(format!("The {id} block in {} was edited on disk; WolinetAi will not overwrite it.", file.display()));
             }
             let mut next = text.clone();
             next.replace_range(range, &block_text);

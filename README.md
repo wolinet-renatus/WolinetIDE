@@ -47,7 +47,7 @@ embedded editor engine.
 - **Cloud agents.** Pick a cloud provider in a New task's **Run on** menu and the
   agent runs on a machine in your own account (Daytona, Cloudflare, AWS, Google Cloud,
   E2B, Modal, Vercel Sandbox, CodeSandbox, Runloop, Blaxel, Tensorlake, Freestyle,
-  boat). PandaCode installs the harness there, copies your login, and keeps the run
+  boat). WolinetIDE installs the harness there, copies your login, and keeps the run
   going while your laptop sleeps; changes come back to a local worktree. See
   [cloud agents](docs/cloud-agents.md).
 - **Simulators.** iOS Simulator and Android emulator tools for agents.
@@ -118,7 +118,7 @@ Discord, WhatsApp or a browser too.
 
 ## Privacy
 
-- **No telemetry, no analytics, no accounts.** PandaCode does not phone home.
+- **No telemetry, no analytics, no accounts.** WolinetIDE does not phone home.
 - **Your code stays on your machine.** Projects, conversations and settings are
   stored locally in SQLite. Prompts go only to the coding CLI or service you
   pick, under that provider's own terms.
@@ -301,9 +301,8 @@ share `acp.rs`.
 ## Data
 
 Data lives in Tauri's per-user application data directory (on macOS,
-`~/Library/Application Support/ai.pandacode.desktop/`) in `kingcode.sqlite3`; the
-database keeps its legacy internal name. Project source stays in the folders you
-open, and removing a project from the app never deletes its files.
+`~/Library/Application Support/ai.pandacode.desktop/`) in `wolinet.sqlite3`;
+project source stays in the folders you open, and removing a project from the app never deletes its files.
 
 ## License
 

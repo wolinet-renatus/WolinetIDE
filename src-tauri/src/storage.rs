@@ -441,7 +441,7 @@ impl Store {
         settle_unfinished_tools(
             &recovery,
             None,
-            "\n\n[PandaCode was interrupted before this tool reported a result.]",
+            "\n\n[WolinetAi was interrupted before this tool reported a result.]",
         )?;
         settle_unfinished_subagents(&recovery, None, "stopped")?;
         recovery
@@ -457,7 +457,7 @@ impl Store {
                 [],
             )
             .map_err(|e| e.to_string())?;
-        recovery.execute_batch("UPDATE architect_teams SET content=json_set(content,'$.status','interrupted','$.pendingTurn',NULL,'$.error','PandaCode restarted. Resume explicitly to continue.','$.generation',COALESCE(json_extract(content,'$.generation'),0)+1,'$.revision',COALESCE(json_extract(content,'$.revision'),0)+1,
+        recovery.execute_batch("UPDATE architect_teams SET content=json_set(content,'$.status','interrupted','$.pendingTurn',NULL,'$.error','WolinetAi restarted. Resume explicitly to continue.','$.generation',COALESCE(json_extract(content,'$.generation'),0)+1,'$.revision',COALESCE(json_extract(content,'$.revision'),0)+1,
             '$.workers',json((SELECT json_group_array(json(CASE WHEN json_extract(value,'$.status') IN ('running','waiting') THEN json_set(value,'$.status','stopped') ELSE value END)) FROM json_each(content,'$.workers'))))
             WHERE json_extract(content,'$.status') IN ('running','waiting');").map_err(|e|e.to_string())?;
         recovery.commit().map_err(|e| e.to_string())?;

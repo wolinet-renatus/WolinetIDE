@@ -258,7 +258,7 @@ fn tool(root: &Path, name: &str, args: &Value) -> Result<Value> {
             Ok(json!({"comments": all.into_iter().filter(|c| want == "all" || (want == "open") == (c.status == Status::Open)).collect::<Vec<_>>()}))
         }
         "pandacode_design_resolve" => Ok(json!({"resolved": resolve(root, &text("id").unwrap_or_default(), text("note"))?})),
-        _ => Err("Unknown PandaCode tool.".into()),
+        _ => Err("Unknown WolinetAI tool.".into()),
     }
 }
 
@@ -284,7 +284,7 @@ pub fn with_design(base: Option<ToolHost>, app: tauri::AppHandle, session_id: St
             Box::pin(async move {
                 if stopped.load(Ordering::SeqCst) { return Err("Task has stopped.".into()); }
                 if !name.starts_with("pandacode_design_") {
-                    return match base { Some(base) => (base.handler)(name, args).await, None => Err("Unknown PandaCode tool.".into()) };
+                    return match base { Some(base) => (base.handler)(name, args).await, None => Err("Unknown WolinetAI tool.".into()) };
                 }
                 validate(&name, &args)?;
                 let changes = !READ_ONLY.contains(&name.as_str());

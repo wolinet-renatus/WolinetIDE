@@ -397,7 +397,7 @@ impl Rpc {
 }
 
 async fn initialize(rpc: &mut Rpc, deadline: Instant) -> Result<(), String> {
-    rpc.request("initialize", json!({"clientInfo":{"name":"pandacode","title":"PandaCode","version":env!("CARGO_PKG_VERSION")},"capabilities":{"experimentalApi":true,"requestAttestation":false}}), deadline)
+    rpc.request("initialize", json!({"clientInfo":{"name":"wolinet","title":"WolinetAi","version":env!("CARGO_PKG_VERSION")},"capabilities":{"experimentalApi":true,"requestAttestation":false}}), deadline)
         .await.map_err(|error| error.warning("Codex integration discovery"))?;
     tokio::time::timeout_at(
         deadline,

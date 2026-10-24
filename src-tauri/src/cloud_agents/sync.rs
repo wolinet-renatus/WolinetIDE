@@ -59,8 +59,8 @@ dir={dir}
 trap 'rm -f "$bundle"' EXIT
 mkdir -p "$(dirname "$dir")"
 git clone --branch {branch} "$bundle" "$dir"
-git -C "$dir" config user.name >/dev/null 2>&1 || git -C "$dir" config user.name 'PandaCode Cloud Agent'
-git -C "$dir" config user.email >/dev/null 2>&1 || git -C "$dir" config user.email 'cloud-agent@pandacode.invalid'
+git -C "$dir" config user.name >/dev/null 2>&1 || git -C "$dir" config user.name 'WolinetAi Cloud Agent'
+git -C "$dir" config user.email >/dev/null 2>&1 || git -C "$dir" config user.email 'cloud-agent@wolinet.invalid'
 printf 'PANDACODE_HEAD %s\n' "$(git -C "$dir" rev-parse HEAD)"
 "#,
         bundle = crate::cloud::shell_quote(&remote_bundle),
@@ -109,8 +109,8 @@ dir={dir_q}
 bundle={bundle_q}
 mkdir -p "$(dirname "$bundle")"
 if [ -n "$(git -C "$dir" status --porcelain)" ]; then
-  git -C "$dir" config user.name >/dev/null 2>&1 || git -C "$dir" config user.name 'PandaCode Cloud Agent'
-  git -C "$dir" config user.email >/dev/null 2>&1 || git -C "$dir" config user.email 'cloud-agent@pandacode.invalid'
+  git -C "$dir" config user.name >/dev/null 2>&1 || git -C "$dir" config user.name 'WolinetAi Cloud Agent'
+  git -C "$dir" config user.email >/dev/null 2>&1 || git -C "$dir" config user.email 'cloud-agent@wolinet.invalid'
   git -C "$dir" add -A
   git -C "$dir" -c core.hooksPath=/dev/null commit -m {message_q}
 fi
@@ -185,8 +185,8 @@ pub(crate) fn push_local(
         r#"set -eu
 dir={dir_q}
 if [ -n "$(git -C "$dir" status --porcelain)" ]; then
-  git -C "$dir" config user.name >/dev/null 2>&1 || git -C "$dir" config user.name 'PandaCode Cloud Agent'
-  git -C "$dir" config user.email >/dev/null 2>&1 || git -C "$dir" config user.email 'cloud-agent@pandacode.invalid'
+  git -C "$dir" config user.name >/dev/null 2>&1 || git -C "$dir" config user.name 'WolinetAi Cloud Agent'
+  git -C "$dir" config user.email >/dev/null 2>&1 || git -C "$dir" config user.email 'cloud-agent@wolinet.invalid'
   git -C "$dir" add -A
   git -C "$dir" -c core.hooksPath=/dev/null commit -m 'Cloud changes before mirror sync'
 fi

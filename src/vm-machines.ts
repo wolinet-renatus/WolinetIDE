@@ -16,7 +16,7 @@ export type Machine = {
   live: boolean;
   desktop: boolean;
   detail: string;
-  /** Local VMs running outside PandaCode must be restarted here to be seen. */
+  /** Local VMs running outside WolinetIDE must be restarted here to be seen. */
   elsewhere: boolean;
   canStart: boolean;
   local?: Vm;

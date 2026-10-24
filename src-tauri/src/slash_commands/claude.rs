@@ -189,7 +189,7 @@ pub(super) fn parse_entries(
                 argument_hint: hint.clone(),
                 kind: kind.into(),
                 source: if kind == "action" {
-                    "PandaCode"
+                    "WolinetAi"
                 } else {
                     provider
                 }

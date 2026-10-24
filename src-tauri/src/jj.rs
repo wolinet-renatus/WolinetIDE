@@ -168,7 +168,7 @@ fn run(root: &Path, args: &[&str]) -> Result<String, String> {
     })?;
     let capture = checked(output)?;
     if capture.truncated {
-        return Err("jj returned more output than PandaCode reads.".into());
+        return Err("jj returned more output than WolinetAI reads.".into());
     }
     Ok(String::from_utf8_lossy(&capture.bytes).into_owned())
 }

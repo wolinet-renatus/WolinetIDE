@@ -55,7 +55,7 @@ pub(crate) fn with_bot(base: Option<ToolHost>, app: tauri::AppHandle, session_id
                 if !names().contains(&name) {
                     return match base {
                         Some(base) => (base.handler)(name, args).await,
-                        None => Err("Unknown PandaCode tool.".into()),
+                        None => Err("Unknown WolinetAI tool.".into()),
                     };
                 }
                 validate_spec(&catalog(), &name, &args)?;
@@ -108,7 +108,7 @@ pub(crate) async fn dispatch(app: &tauri::AppHandle, session_id: &str, name: &st
                     schedule::delete(&store, &bot.id, &string("scheduleId"))?;
                     json!({"deleted": true})
                 }
-                _ => return Err("Unknown PandaCode tool.".into()),
+                _ => return Err("Unknown WolinetAI tool.".into()),
             }
         }
     };

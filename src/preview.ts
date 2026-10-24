@@ -22,7 +22,7 @@ const sampleSource = '// Browser preview — sample source\nexport function crea
 const previewWorkspaceFiles = ['index.html', '.gitignore', 'README.md', 'package.json', 'tsconfig.json', 'src/main.ts', 'src/style.css', 'src/components/search.ts', 'src/components/search.test.ts', 'src/lib/search-index.ts', 'public/favicon.svg', 'docs/design notes.md'];
 const sampleTestOutput = 'PASS src/components/search.test.ts\n  ✓ filters results as the query changes\n  ✓ preserves keyboard selection\n\nTests: 12 passed, 12 total\nTime: 0.8s\nSample output — no command was executed.';
 function encodeTool(tool: ToolActivity): string { return JSON.stringify({ type: 'tool_activity', version: 1, ...tool }); }
-let projects: Project[] = [{ id: 'project-1', name: 'orbit', path: '/Users/you/Projects/orbit' }, { id: 'project-2', name: 'pandacode', path: '/Users/you/Projects/pandacode' }];
+let projects: Project[] = [{ id: 'project-1', name: 'orbit', path: '/Users/you/Projects/orbit' }, { id: 'project-2', name: 'wolinet', path: '/Users/you/Projects/wolinet' }];
 let sessions: Session[] = [
   { id: 'session-1', projectId: 'project-1', title: 'Make search feel instant', provider: 'wolinet', model: 'wolinet-pro', mode: 'ask', status: 'idle', createdAt: now - 420000, updatedAt: now, archived: false, worktreePath: null, resumeId: 'preview-session', lastResponseAt: now - 300000 },
   { id: 'session-2', projectId: 'project-1', title: 'Refine the navigation', provider: 'wolinet', model: 'wolinet-pro', mode: 'ask', status: 'idle', createdAt: now - 8200000, updatedAt: now - 8000000, archived: false, worktreePath: null, resumeId: null, lastResponseAt: null },
@@ -216,7 +216,7 @@ function previewWorktree(source: Session, args: Record<string, any>): { path: st
   const parent = projects.find(p => p.id === source.projectId)!;
   const name = String(args.branch ?? '').trim();
   if (!name || name.length > 120 || name.includes('..') || !/^[A-Za-z0-9_/-]+$/.test(name)) throw new Error('Use a branch name with letters, numbers, hyphens, underscores, and slashes');
-  const branch = /^(codex|pandacode|kingcode)\//.test(name) ? name : 'pandacode/' + name;
+  const branch = /^(codex|pandacode|kingcode|wolinet)\//.test(name) ? name : 'wolinet/' + name;
   const exists = previewBranches.has(branch);
   if (args.existing && !exists) throw new Error(`Branch ${branch} does not exist yet. Create it instead.`);
   if (!args.existing && exists) throw new Error(`Branch ${branch} already exists. Use the existing branch or choose another name.`);
@@ -316,7 +316,7 @@ const previewSimulator = (() => {
   const poses = new Map<string, 'closed' | 'book' | 'open'>();
   const inners: Record<string, { width: number; height: number }> = { A1B2: { width: 951, height: 669 } };
   const screens: Record<string, { width: number; height: number; scale: number; homeButton: boolean }> = { '5B7E': { width: 820, height: 1180, scale: 2, homeButton: false }, '6C1D': { width: 420, height: 912, scale: 3, homeButton: false }, '7D2E': { width: 402, height: 874, scale: 3, homeButton: false }, 'A1B2': { width: 466, height: 678, scale: 3, homeButton: false }, '8E3F': { width: 1032, height: 1376, scale: 2, homeButton: false }, '9F40': { width: 390, height: 844, scale: 3, homeButton: false }, andr: { width: 412, height: 915, scale: 2.625, homeButton: false } };
-  (window as any).__simSetPose = (udid: string, pose: 'closed' | 'book' | 'open') => { poses.set(udid, pose); seq++; }; // tests: the hinge moved outside PandaCode
+  (window as any).__simSetPose = (udid: string, pose: 'closed' | 'book' | 'open') => { poses.set(udid, pose); seq++; }; // tests: the hinge moved outside WolinetIDE
   const screenOf = (udid: string | null) => ({ ...(screens[udid?.slice(0, 4) ?? ''] ?? { width: 402, height: 874, scale: 3, homeButton: false }), inner: inners[udid?.slice(0, 4) ?? ''] ?? null });
   /** The display frames and taps use: the Duo's inner display when it is not closed. */
   const activeOf = (udid: string) => { const screen = screenOf(udid); return screen.inner && (poses.get(udid) ?? 'closed') !== 'closed' ? screen.inner : screen; };
@@ -538,7 +538,7 @@ const previewImportables: Record<'claude' | 'codex', { id: string; title: string
     { id: '9f8e7d6c-5b4a-4938-8271-6a5b4c3d2e1f', title: 'Old scratch experiment', folder: '/missing/scratch', updatedAt: now - 40 * 86400000, messages: 3, model: null },
   ],
   codex: [
-    { id: '4c5d6e7f-8a9b-4c0d-9e1f-2a3b4c5d6e7f', title: 'Speed up the search index', folder: '/Users/you/Projects/pandacode', updatedAt: now - 5 * 3600000, messages: null, model: 'gpt-6-astra' },
+    { id: '4c5d6e7f-8a9b-4c0d-9e1f-2a3b4c5d6e7f', title: 'Speed up the search index', folder: '/Users/you/Projects/wolinet', updatedAt: now - 5 * 3600000, messages: null, model: 'gpt-6-astra' },
   ],
 };
 /** Mirrors native storage: a New task draft is published by its first saved prompt. */
@@ -639,7 +639,7 @@ export async function invoke<T>(command: string, args: Record<string, any>): Pro
   if (command.includes('moodboard')) return (await import('./preview-moodboards')).invokeMoodboards<T>(command, args);
   if (command === 'bots_list' || command.startsWith('bot_')) return invokeBots<T>(command, args, {
     invoke, emit,
-    addProject: name => { const p = { id: crypto.randomUUID(), name, path: `/Users/you/PandaCode Bots/${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}` }; projects.push(p); return p; },
+    addProject: name => { const p = { id: crypto.randomUUID(), name, path: `/Users/you/WolinetAi Bots/${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}` }; projects.push(p); return p; },
   });
   if (command === 'remote_repo_check') {
     // `window.__remoteBehind` lets tests make GitHub lag this computer.
@@ -667,7 +667,7 @@ export async function invoke<T>(command: string, args: Record<string, any>): Pro
     if (!target) throw new Error('Connect this provider in Settings → Cloud first.');
     ((window as any).__cloudStarts ??= []).push(args);
     const s = args.sessionId ? session(args.sessionId) : await invoke<Session>('create_session', { projectId: args.projectId, provider: args.harness, model: args.model, mode: args.mode });
-    Object.assign(s, { provider: args.harness, model: args.model, mode: args.mode, reasoningEffort: args.effort, draft: false, worktreeBranch: `pandacode/cloud-${s.id.slice(0, 8)}`, cloud: { provider: target.provider, label: target.label, machine: `${target.provider}:pc-${s.id.slice(0, 8)}`, stage: 'creating', detail: null } });
+    Object.assign(s, { provider: args.harness, model: args.model, mode: args.mode, reasoningEffort: args.effort, draft: false, worktreeBranch: `wolinet/cloud-${s.id.slice(0, 8)}`, cloud: { provider: target.provider, label: target.label, machine: `${target.provider}:pc-${s.id.slice(0, 8)}`, stage: 'creating', detail: null } });
     const stages = ['installing', 'credentials', 'uploading', 'running'] as const;
     stages.forEach((stage, index) => setTimeout(async () => {
       cloudStage(s, stage);
@@ -932,7 +932,7 @@ export async function invoke<T>(command: string, args: Record<string, any>): Pro
         const created = await invoke<Session>('create_session', { projectId: project.id, provider: source, model: found.model ?? args.model, mode: 'full' });
         const task = session(created.id);
         Object.assign(task, { resumeId: conversationId, title: found.title, taskStage: 'in_progress', createdAt: found.updatedAt - 600000, updatedAt: found.updatedAt, lastPromptAt: found.updatedAt - 600000, lastResponseAt: found.updatedAt });
-        messages[task.id] = [{ id: ++id, sessionId: task.id, role: 'user', content: `Imported: ${found.title}`, createdAt: found.updatedAt - 600000 }, { id: ++id, sessionId: task.id, role: 'assistant', content: 'This conversation was imported into WolinetIDE.', createdAt: found.updatedAt }];
+        messages[task.id] = [{ id: ++id, sessionId: task.id, role: 'user', content: `Imported: ${found.title}`, createdAt: found.updatedAt - 600000 }, { id: ++id, sessionId: task.id, role: 'assistant', content: 'This conversation was imported into WolinetAi.', createdAt: found.updatedAt }];
         imported.push(taskSummary(task));
       }
       if (imported.length) emit('sessions-changed', undefined);
@@ -976,7 +976,7 @@ export async function invoke<T>(command: string, args: Record<string, any>): Pro
     case 'agent_ui_request_active': result = true; break;
     case 'resolve_agent_ui_action': break;
     case 'open_external_url': { const url = new URL(args.url); if (!['http:', 'https:'].includes(url.protocol)) throw new Error('Use an HTTP or HTTPS URL.'); window.open(url.href, '_blank', 'noopener,noreferrer'); break; }
-    case 'open_support': window.open('https://github.com/wolinet-renatus/pandacode/issues', '_blank', 'noopener,noreferrer'); break;
+    case 'open_support': window.open('https://github.com/wolinet-renatus/WolinetIDE/issues', '_blank', 'noopener,noreferrer'); break;
     case 'local_sign_app': break;
     case 'support_details': result = { version: 'Preview', platform: 'Browser preview', architecture: 'Not reported' }; break;
     case 'browser_inspect': result = args.action === 'read' ? { url: browserState.url, title: browserState.title, text: 'Browser preview sample page', elements: [] } : { dispatched: true }; break;
@@ -1008,11 +1008,11 @@ export async function invoke<T>(command: string, args: Record<string, any>): Pro
     }
     case 'create_session': { const s: Session = { id: crypto.randomUUID(), ...args, pinned: false, sidebarOrder: null, draft: Boolean(args.draft), mode: args.mode ?? 'full', title: 'New conversation', status: 'idle', createdAt: Date.now(), updatedAt: Date.now(), archived: false, worktreePath: null, resumeId: null, lastResponseAt: null, lastPromptAt: null, reasoningEffort: null, contextUsage: null, taskStage: 'pending', taskDescription: '', completedAt: null } as Session; sessions.unshift(s); messages[s.id] = []; architect.inherit(s.id); result = s; break; }
     case 'chat_create': {
-      const project = { id: crypto.randomUUID(), name: 'Chat', path: `/Users/you/PandaCode Chats/chat-${crypto.randomUUID().slice(0, 8)}` }; projects.push(project);
+      const project = { id: crypto.randomUUID(), name: 'Chat', path: `/Users/you/WolinetAi Chats/chat-${crypto.randomUUID().slice(0, 8)}` }; projects.push(project);
       result = await invoke<Session>('create_session', { projectId: project.id, provider: args.provider, model: args.model, mode: args.mode }); break;
     }
     case 'chat_cleanup': {
-      const chat = projects.some(p => p.id === args.projectId && p.path.includes('/PandaCode Chats/')) && !sessions.some(s => s.projectId === args.projectId);
+      const chat = projects.some(p => p.id === args.projectId && (p.path.includes('/WolinetAi Chats/') || p.path.includes('/PandaCode Chats/'))) && !sessions.some(s => s.projectId === args.projectId);
       if (chat) projects = projects.filter(p => p.id !== args.projectId);
       result = chat; break;
     }

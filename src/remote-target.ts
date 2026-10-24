@@ -3,7 +3,7 @@ import type { RemoteRepoCheck, RemoteTarget } from './remote-types';
 import type { Session } from './types';
 import { cloudChip, cloudItems, cloudProvider, type CloudTarget } from './cloud-agents';
 
-/* The context bar's computer choice (PandaCode Connect). A new task can start on another
+/* The context bar's computer choice (Wolinet Connect). A new task can start on another
  * signed-in computer; a task that runs there shows that computer, locked. */
 
 export const LOCAL = 'local';

@@ -904,6 +904,6 @@ html[data-theme="dark"] body .dialog-plate{box-shadow:0 40px 100px -30px rgb(0 0
 .steer-state .icon{width:13px;height:13px}
 :is(.steer-state,.queue-status,.queue-next) .support-spinner{width:11px;height:11px}
 .queue-status{margin-left:auto;font-size:.74rem;color:var(--muted)}
-/* PandaCode is instant: no transitions anywhere. Looping status indicators (spinners,
+/* WolinetIDE is instant: no transitions anywhere. Looping status indicators (spinners,
    working pulses) are animations, not transitions, so they keep running. */
 *,*::before,*::after{transition:none!important}

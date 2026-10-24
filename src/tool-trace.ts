@@ -105,10 +105,10 @@ function mcpParts(name: string): { server: string; tool: string } {
   const mcp = /^mcp__(.+?)__(.+)$/.exec(name);
   if (mcp) return { server: mcp[1], tool: mcp[2] };
   const local = name.replace(/^pandacode_architect_/, '').replace(/^pandacode_/, '');
-  return { server: 'PandaCode', tool: local };
+  return { server: 'WolinetAI', tool: local };
 }
 
-/** `Dispatched 2 workers`-style verbs for PandaCode's own tools; undefined keeps the generic `Used [server] tool`. */
+/** `Dispatched 2 workers`-style verbs for WolinetAI's own tools; undefined keeps the generic `Used [server] tool`. */
 function pandacodeTrace(tool: string, fields: Fields, running: boolean): Partial<Trace> | undefined {
   const workers = Array.isArray(fields.workers) ? fields.workers.length : Array.isArray(fields.tasks) ? fields.tasks.length : 0;
   if (tool === 'dispatch_workers') return { verb: running ? 'Dispatching' : 'Dispatched', object: workers ? `${workers} ${workers === 1 ? 'worker' : 'workers'}` : 'workers' };
@@ -157,8 +157,8 @@ function describeFields(kind: TraceKind, name: string, input: string, fields: Fi
     }
     case 'mcp': {
       const { server, tool } = mcpParts(name);
-      const own = server === 'PandaCode' ? pandacodeTrace(tool, fields, running) : undefined;
-      if (own) return { chip: { icon: 'server', label: 'PandaCode', title: name }, object: '', ...own };
+      const own = (server === 'WolinetAI' || server === 'PandaCode') ? pandacodeTrace(tool, fields, running) : undefined;
+      if (own) return { chip: { icon: 'server', label: 'WolinetAI', title: name }, object: '', ...own };
       return { chip: { icon: 'server', label: server, title: name }, object: tool.replace(/_/g, ' ') };
     }
     default: return { chip: { icon: 'command', label: name || 'Tool', title: name || 'Tool' }, object: inputHint(input) };

@@ -453,13 +453,13 @@ fn app_instructions(chat: bool) -> String {
     [session_titles::GUIDANCE, run, turn_changes::instruction(), TURN_ENDS, RICH_QUESTIONS, GENERATIVE_UI].concat()
 }
 
-/// PandaCode closes the harness when a turn ends, so background waits never come back.
-const TURN_ENDS: &str = "\n\nYour turn ends when you reply, and PandaCode then closes this session's process: background commands, monitors and scheduled wakeups started in this turn never report back. Wait for long-running commands in the foreground (or poll them) before you reply.";
+/// WolinetAI closes the harness when a turn ends, so background waits never come back.
+const TURN_ENDS: &str = "\n\nYour turn ends when you reply, and WolinetAI then closes this session's process: background commands, monitors and scheduled wakeups started in this turn never report back. Wait for long-running commands in the foreground (or poll them) before you reply.";
 
-/// Questions to the user render rich Markdown in PandaCode; agents only use it if told.
-const RICH_QUESTIONS: &str = "\n\nQuestions you ask through the request_user_input tool, where available, render Markdown in PandaCode: use links, images by workspace path (![alt](relative/path.png)), ```chart blocks with JSON {\"type\":\"bar\"|\"line\"|\"pie\",\"title\",\"labels\":[…],\"series\":[{\"name\",\"values\":[…]}]}, ```svg drawings, or static ```html views when a visual helps the user decide. Remote images show as links; scripts never run.";
+/// Questions to the user render rich Markdown in WolinetAI; agents only use it if told.
+const RICH_QUESTIONS: &str = "\n\nQuestions you ask through the request_user_input tool, where available, render Markdown in WolinetAI: use links, images by workspace path (![alt](relative/path.png)), ```chart blocks with JSON {\"type\":\"bar\"|\"line\"|\"pie\",\"title\",\"labels\":[…],\"series\":[{\"name\",\"values\":[…]}]}, ```svg drawings, or static ```html views when a visual helps the user decide. Remote images show as links; scripts never run.";
 
-/// Replies may carry generative UI blocks that PandaCode draws in the thread.
+/// Replies may carry generative UI blocks that WolinetAI draws in the thread.
 const GENERATIVE_UI: &str = "\n\nGenerative UI: when a visual beats prose, a reply may include a ```ui block holding JSON {\"type\":…}; ```chart, ```svg and ```html work too. Types (fields): callout(tone info|success|warning|danger|note,title,body), card(title,body,footer,actions,children), stats(items[{label,value,delta,hint,spark[]}]), table(title,columns[],rows[[…]]), chart(chart bar|line|pie|area|sparkline,title,labels,series[{name,values}]), progress(label,value,max), plan|steps|timeline(title,summary,items[{title,detail,status done|active|pending|error|skipped,time}],actions), checklist(items[{text,done}]), tabs|accordion(items[{label,body,children}]), tree(paths[] or items[{name,status,children}]), diff(file,diff), code(file,language,code), terminal(command,output,exitCode), compare(items[{title,pros,cons,verdict}]), gallery(images[{path,caption}]), actions(buttons[{label,prompt,tone}]), chips|followups(options[{label,prompt}]), or inline :codex-followup[Label]{prompt=\"…\"}, form(title,fields[{name,label,type text|textarea|number|select|checkbox,options}],submit,prompt with {name}), stack|grid(columns,children), custom(html,css,state; data-ui-toggle=\"#id\", data-ui-tab/data-ui-panel, data-ui-set=\"k=v\", data-ui-bind=\"k\", data-ui-prompt). Bodies are Markdown. Buttons and forms only put a prompt in the user's composer; nothing runs, and remote URLs are not loaded. ```mermaid shows as labelled source. For a page that needs scripts, write an HTML file and open it with pandacode_preview_file.";
 
 /// Harnesses without a system prompt hear the app instructions again every few turns.
@@ -3144,8 +3144,20 @@ pub fn run() {
                 eprintln!("Jev settings are unavailable; browser testing remains disabled.");
             }
             // Retain the database filename and bundle identifier so upgrades reuse existing data.
+            let db_path = dir.join("wolinet.sqlite3");
+            if !db_path.exists() {
+                let legacy = dir.join("kingcode.sqlite3");
+                if legacy.exists() {
+                    let _ = std::fs::rename(&legacy, &db_path);
+                } else {
+                    let legacy_panda = dir.join("pandacode.sqlite3");
+                    if legacy_panda.exists() {
+                        let _ = std::fs::rename(&legacy_panda, &db_path);
+                    }
+                }
+            }
             let store =
-                Store::open(&dir.join("kingcode.sqlite3")).map_err(std::io::Error::other)?;
+                Store::open(&db_path).map_err(std::io::Error::other)?;
             if let Err(error) = store.discard_empty_drafts() {
                 eprintln!("Could not clear unsent new tasks: {error}");
             }

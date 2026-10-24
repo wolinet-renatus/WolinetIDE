@@ -113,7 +113,7 @@ pub(super) fn parse_models(result: &Value) -> Result<Vec<ModelInfo>, String> {
 
 fn initialize() -> Value {
     json!({"jsonrpc":"2.0","id":INITIALIZE,"method":"initialize","params":{
-        "clientInfo":{"name":"pandacode","title":"PandaCode","version":env!("CARGO_PKG_VERSION")},
+        "clientInfo":{"name":"wolinet","title":"WolinetAi","version":env!("CARGO_PKG_VERSION")},
         "capabilities":{"requestedCapabilities":["sessionMcp"]}
     }})
 }

@@ -187,7 +187,7 @@ async fn dispatch(app: tauri::AppHandle, session_id: String, name: String, args:
             }
             "pandacode_vm_exec" => exec(&vms, &target()?, &args),
             "pandacode_vm_manage" => manage(&app, &session_id, &vms, &args),
-            _ => Err("Unknown PandaCode tool.".into()),
+            _ => Err("Unknown WolinetAI tool.".into()),
         }
     })
     .await
@@ -221,7 +221,7 @@ pub fn with_vm(base: Option<ToolHost>, app: tauri::AppHandle, session_id: String
                 if !name.starts_with("pandacode_vm_") {
                     return match base {
                         Some(base) => (base.handler)(name, args).await,
-                        None => Err("Unknown PandaCode tool.".into()),
+                        None => Err("Unknown WolinetAI tool.".into()),
                     };
                 }
                 validate_spec(&catalog(), &name, &args)?;

@@ -86,7 +86,7 @@ test('launcher shows saved team models beside its architect and preserves the co
   await page.clock.install();
   await instrumentLauncher(page, `if (command === 'overlay_snapshot') {
     const count = window.__teamWorkerCount ?? 2;
-    return {tasks, projects:[{id:'preview-project',name:'PandaCode',path:'/Projects/PandaCode'}],
+    return {tasks, projects:[{id:'preview-project',name:'WolinetIDE',path:'/Projects/WolinetIDE'}],
       context:{...effectiveContext(),...(!previewPreferences.modelSelection && count > 0 ? {provider:'claude',model:'opus',reasoningEffort:'medium'} : {})},
       activeCount:4, teamWorkerCount:count};
   }`);
@@ -167,7 +167,7 @@ test('launcher file mentions insert a quoted reference without sending and keep 
 });
 
 test('launcher file mentions stay scoped to the selected project and ignore delayed previous results', async ({page}) => {
-  await instrumentLauncher(page, `if (command === 'overlay_snapshot') return {tasks,projects:[{id:'preview-project',name:'PandaCode',path:'/Projects/PandaCode'},{id:'other-project',name:'Other project',path:'/Projects/Other'}],context:effectiveContext(),activeCount:4};
+  await instrumentLauncher(page, `if (command === 'overlay_snapshot') return {tasks,projects:[{id:'preview-project',name:'WolinetIDE',path:'/Projects/WolinetIDE'},{id:'other-project',name:'Other project',path:'/Projects/Other'}],context:effectiveContext(),activeCount:4};
     if (command === 'search_files') {
       if (args.projectId === 'preview-project') {
         await new Promise(resolve => {window.__releaseFileSearch=resolve;});

@@ -54,7 +54,7 @@ pub(crate) struct Status {
 }
 
 /// An inbox that does not hold what the bridge acknowledged: nothing can be appended safely.
-const INBOX_MISMATCH: &str = "The cloud run's input no longer matches what PandaCode sent";
+const INBOX_MISMATCH: &str = "The cloud run's input no longer matches what WolinetAi sent";
 /// Raw bytes per inbox append, so the whole command stays under 60 KiB.
 const APPEND_MAX: usize = crate::cloud::sandbox::CHUNK;
 

@@ -123,7 +123,7 @@ export function mountAgentUsage(host: HTMLElement, providers: Provider[]): () =>
       const calendar = calendarFor(id, ledger, prompts);
       if (!calendar) { slot.innerHTML = ledger || prompts ? '<p class="usage-calendar-empty">No activity recorded for this agent yet.</p>' : ''; continue; }
       const heatmap = usageHeatmap(calendar.daily, { unit: calendar.unit, label: `${nameOf(id)} daily ${calendar.unit}` });
-      if (calendar.unit === 'prompts') heatmap.querySelector('.heatmap-heading h3')?.insertAdjacentHTML('beforeend', ` ${infoMark('This agent does not keep token logs PandaCode can read, so the calendar counts prompts you sent from PandaCode.', 'About this calendar')}`);
+      if (calendar.unit === 'prompts') heatmap.querySelector('.heatmap-heading h3')?.insertAdjacentHTML('beforeend', ` ${infoMark('This agent does not keep token logs WolinetIDE can read, so the calendar counts prompts you sent from WolinetIDE.', 'About this calendar')}`);
       slot.replaceChildren(heatmap);
     }
   }

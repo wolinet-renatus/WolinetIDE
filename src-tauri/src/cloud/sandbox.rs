@@ -72,7 +72,7 @@ pub trait Sandbox: Send + Sync {
         if code != Some(0) && output.trim().is_empty() {
             return Ok(Vec::new());
         }
-        STANDARD.decode(output.trim()).map_err(|_| "The cloud machine sent a file PandaCode could not read.".into())
+        STANDARD.decode(output.trim()).map_err(|_| "The cloud machine sent a file WolinetAi could not read.".into())
     }
 }
 
@@ -217,7 +217,7 @@ impl Sandbox for Cloudflare {
         if code != Some(0) && output.trim().is_empty() {
             return Ok(Vec::new());
         }
-        STANDARD.decode(output.trim()).map_err(|_| "The cloud machine sent a file PandaCode could not read.".into())
+        STANDARD.decode(output.trim()).map_err(|_| "The cloud machine sent a file WolinetAi could not read.".into())
     }
 }
 

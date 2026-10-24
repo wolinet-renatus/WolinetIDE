@@ -11,15 +11,15 @@ export function approvalModes(provider: ProviderId): ApprovalMode[] {
     : provider === 'codex'
     ? 'Work in this project. Ask you when an action needs extra permission.'
     : provider === 'github-copilot'
-    ? 'Use Copilot Agent mode with Allow All off. PandaCode asks before permission requests.'
+    ? 'Use Copilot Agent mode with Allow All off. WolinetAi asks before permission requests.'
     : provider === 'grok'
     ? 'Grok asks before edits and commands, whatever its own config says.'
     : pi
-    ? `${pi} runs without its own approvals; PandaCode asks before edits, commands and other non-read tools.`
+    ? `${pi} runs without its own approvals; WolinetAi asks before edits, commands and other non-read tools.`
     : provider === 'deepseek'
     ? 'DeepSeek edits and runs commands inside this project freely; it asks you before going outside it.'
     : provider === 'cline'
-    ? 'Cline acts; reads and searches run, PandaCode asks before edits, commands and other tools.'
+    ? 'Cline acts; reads and searches run, WolinetAi asks before edits, commands and other tools.'
     : provider === 'muse'
     ? 'Muse asks before actions its rules do not allow. Its own reviewer may approve low-risk ones.'
     : 'Use the harness’s normal rules. Ask you when approval is needed.' };

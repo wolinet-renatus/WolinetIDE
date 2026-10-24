@@ -2336,7 +2336,7 @@ fn a_silent_review_is_asked_once_to_continue_with_the_reason() {
     assert_eq!(watchdog::stop_silent(&state, storage::now() + SILENT, &mut |_| {}).unwrap(), 1);
     settle(&state, &review, false, true);
     let nudge = next_action_state(&state, &mut |_| {}).unwrap().unwrap();
-    assert!(nudge.prompt.starts_with("PandaCode stopped your last turn after"));
+    assert!(nudge.prompt.starts_with("WolinetAi stopped your last turn after"));
 }
 #[test]
 fn a_resumed_conversation_gets_the_team_rules_once_and_only_new_messages() {
@@ -2345,12 +2345,12 @@ fn a_resumed_conversation_gets_the_team_rules_once_and_only_new_messages() {
     store.db.execute("UPDATE sessions SET resume_id='native-1' WHERE id=?1", [&sid]).unwrap();
     let admission = Admission { parent: sid.clone(), generation: 1 };
     let first = prompt(&store, &sid, "Build the parser", Some(&admission)).unwrap();
-    assert!(first.contains("PandaCode architect mode. Coordinate"));
+    assert!(first.contains("WolinetAi architect mode. Coordinate"));
     assert!(first.ends_with("Build the parser"));
     let second = prompt(&store, &sid, "Now the renderer", Some(&admission)).unwrap();
-    assert!(!second.contains("PandaCode architect mode. Coordinate"));
+    assert!(!second.contains("WolinetAi architect mode. Coordinate"));
     assert!(!second.contains("Team coordination"));
-    assert!(second.starts_with("PandaCode architect mode continues"));
+    assert!(second.starts_with("WolinetAi architect mode continues"));
     assert!(second.ends_with("Now the renderer"));
     store.db.execute("INSERT INTO architect_messages(parent_session_id,sender,recipient,request_key,content,created_at) VALUES(?1,'w1','architect','k','Renderer API is ready',1)", [&sid]).unwrap();
     let third = prompt(&store, &sid, "Review", Some(&admission)).unwrap();
@@ -2361,10 +2361,10 @@ fn a_resumed_conversation_gets_the_team_rules_once_and_only_new_messages() {
     let mut team = load(&store, &sid).unwrap().unwrap();
     team.config.max_rounds += 4;
     save(&store, &mut team).unwrap();
-    assert!(prompt(&store, &sid, "Go on", Some(&admission)).unwrap().contains("PandaCode architect mode. Coordinate"));
+    assert!(prompt(&store, &sid, "Go on", Some(&admission)).unwrap().contains("WolinetAi architect mode. Coordinate"));
     // A conversation the harness starts afresh has never seen them.
     store.db.execute("UPDATE sessions SET resume_id=NULL WHERE id=?1", [&sid]).unwrap();
-    assert!(prompt(&store, &sid, "Go on", Some(&admission)).unwrap().contains("PandaCode architect mode. Coordinate"));
+    assert!(prompt(&store, &sid, "Go on", Some(&admission)).unwrap().contains("WolinetAi architect mode. Coordinate"));
 }
 
 #[test]
@@ -2384,7 +2384,7 @@ fn lead_guidance_joins_the_team_rules_and_is_reminded() {
     assert!(guidance < guard, "the guard against worker output stays last");
     // Ordinary turns name it in the one-line reminder.
     let second = prompt(&store, &sid, "Now the renderer", Some(&admission)).unwrap();
-    assert!(second.starts_with("PandaCode architect mode continues"));
+    assert!(second.starts_with("WolinetAi architect mode continues"));
     assert!(second.contains("including the user's team guidance"));
 }
 

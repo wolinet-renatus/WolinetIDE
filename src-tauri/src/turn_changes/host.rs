@@ -38,7 +38,7 @@ pub(crate) fn with_host(
                 if name != TOOL {
                     return match base {
                         Some(base) => (base.handler)(name, args).await,
-                        None => Err("Unknown PandaCode tool.".into()),
+                        None => Err("Unknown WolinetAI tool.".into()),
                     };
                 }
                 let tracker = tracker.ok_or("No file tracking is active for this turn.")?;

@@ -1,5 +1,5 @@
 /* The updater's decisions, kept free of app imports so they can be tested on their own:
- * how often to check, when a downloaded update may restart PandaCode, and how Settings
+ * how often to check, when a downloaded update may restart WolinetIDE, and how Settings
  * describes each state. */
 export type UpdateState =
   | { kind: 'off' }

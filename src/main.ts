@@ -855,7 +855,7 @@ function loadModels(id: ProviderId): Promise<ProviderModel[]> {
   return pending;
 }
 
-/* Another computer's catalog (PandaCode Connect): kept per device, never in state.providers. */
+/* Another computer's catalog (Wolinet Connect): kept per device, never in state.providers. */
 const remoteCatalogs = new Map<string, Promise<Provider[]>>();
 const remoteModelCatalogs = new Map<string, Promise<ProviderModel[]>>();
 let localChoice: { provider: ProviderId; model: string } | undefined;
@@ -1208,9 +1208,7 @@ function messageHtml(m: Message): string {
   const author = historicalProvider(m, state.messages, session()?.provider ?? state.defaultProvider);
   return `<article class="message ${isUser ? 'user-message' : 'agent-message'}" data-message-id="${m.id}"><div class="message-meta"><span class="message-avatar ${isUser ? 'user-avatar' : ''}">${isUser ? 'Y' : providerLogo(author)}</span><strong>${isUser ? 'You' : escape(provider(author)?.name || 'Agent')}</strong><time>${formatTime(m.createdAt)}</time></div><div class="message-content ${isUser ? '' : 'markdown'}" ${isUser ? '' : `data-markdown="${m.id}"`}>${isUser ? userContent(m.content) : escape(m.content)}</div>${isUser && m.id < 0 ? steerStateHtml(m) : ''}${messageActionsHtml(m.sessionId, m.id, m.id > 0 && (isUser || m.role === 'assistant'))}</article>`;
 }
-// Context appended at send time (files, documents, folders, GitHub, browser, images) folds
-// behind one summary so the transcript reads as what you said, with the payload a click away.
-const CONTEXT_BOUNDARY = /\n\n(?=(?:File|Document|Folder|GitHub|Browser element) context[ :(]|Attached (?:browser screenshot|image|mockup)[ :]|Bot brief:\n|Response style \(PandaCode token saver)/;
+const CONTEXT_BOUNDARY = /\n\n(?=(?:File|Document|Folder|GitHub|Browser element) context[ :(]|Attached (?:browser screenshot|image|mockup)[ :]|Bot brief:\n|Response style \((?:PandaCode|WolinetAi) token saver)/;
 function userContent(content: string): string {
   const index = content.search(CONTEXT_BOUNDARY);
   if (index < 0) return escape(content);
@@ -2021,7 +2019,7 @@ async function performSlashAction(action: string, argumentsText: string, task: S
       await navigator.clipboard.writeText(answer.content); notify('Response copied'); break;
     }
     case 'pwd': modal('Working directory', `<p class="dialog-description">${escape(workspacePath())}</p>`); break;
-    default: throw new Error('This command is not available in PandaCode yet.');
+    default: throw new Error('This command is not available in WolinetIDE yet.');
   }
 }
 
@@ -3227,7 +3225,7 @@ async function showDefaultModel(anchor: HTMLElement): Promise<void> {
 }
 function showDeleteTask(): void {
   const task = session(); if (!task || isRunning(task.id) || configuringSessions.has(task.id)) return;
-  const dialog = modal('Delete task?', `<form id="delete-task-form"><p class="delete-task-name">${escape(task.title)}</p><p class="delete-task-description">Permanently delete this conversation and its worker history from PandaCode? This cannot be undone. Its terminal tabs close and running commands may stop. Project files and worktrees stay.</p><p class="delete-task-error" role="alert" hidden></p><div class="dialog-footer"><button type="button" class="secondary-button" data-action="close-dialog">Cancel</button><button type="submit" class="secondary-button delete-task-confirm">Delete task</button></div></form>`, 'delete-task-dialog');
+  const dialog = modal('Delete task?', `<form id="delete-task-form"><p class="delete-task-name">${escape(task.title)}</p><p class="delete-task-description">Permanently delete this conversation and its worker history from WolinetIDE? This cannot be undone. Its terminal tabs close and running commands may stop. Project files and worktrees stay.</p><p class="delete-task-error" role="alert" hidden></p><div class="dialog-footer"><button type="button" class="secondary-button" data-action="close-dialog">Cancel</button><button type="submit" class="secondary-button delete-task-confirm">Delete task</button></div></form>`, 'delete-task-dialog');
   const form = dialog.querySelector<HTMLFormElement>('#delete-task-form')!;
   const confirm = form.querySelector<HTMLButtonElement>('[type="submit"]')!;
   const error = form.querySelector<HTMLElement>('[role="alert"]')!;
@@ -3318,13 +3316,13 @@ function closeSettings(): void {
   (settingsReturnFocus?.isConnected ? settingsReturnFocus : $('#prompt'))?.focus({ preventScroll: true });
   settingsReturnFocus = null;
 }
-/** Light and dark belong to PandaCode's palette; switching leaves a VS Code theme. */
+/** Light and dark belong to WolinetIDE's palette; switching leaves a VS Code theme. */
 function toggleTheme(): void {
   const vsix = palette.vsix;
   const next = currentTheme() === 'dark' ? 'light' : 'dark';
   if (vsix) palette.setVsix(null);
   setTheme(next); renderThemeToggle();
-  if (vsix) notify(`${vsix.name} turned off · PandaCode ${next}`);
+  if (vsix) notify(`${vsix.name} turned off · WolinetIDE ${next}`);
   if (settingsView) { closeSettings(); void showSettings('appearance'); }
 }
 let colorsSettingsCleanup: (() => void) | undefined;
@@ -3535,7 +3533,7 @@ async function reloadBotProjects(withProjects = true): Promise<void> {
 const userProjects = (): Project[] => state.projects.filter(project => !botProjects.has(project.id) && !isChatProject(project));
 /** Whether a task runs as a projectless chat. */
 const chatTask = (task: Session | undefined): boolean => Boolean(task && isChatProject(state.projects.find(p => p.id === task.projectId)));
-/* PandaCode Connect. A new task can start on another computer: the context bar offers the
+/* Wolinet Connect. A new task can start on another computer: the context bar offers the
  * signed-in account's targets; the started task is an ordinary session with `remoteDevice`. */
 const remoteHost: RemoteHost = { call, listen: (name, callback) => subscribe(name as 'remote://status', callback), notify, openUrl: url => call('open_external_url', { url }) };
 let remoteTargets: RemoteTarget[] = [], remoteChoice = LOCAL;
@@ -4039,7 +4037,7 @@ async function boot(): Promise<void> {
   if (state.view !== 'conversation' && state.generation === bootGeneration) { state.boardPanel = false; renderInspector(); renderBoardView(); }
   if (!preview && !state.providers.some(p => p.installed)) notify('Open Settings to check your installed agent CLIs.');
 }
-// PandaCode's own updates: checked on GitHub Releases, installed when no agent is working.
+// WolinetIDE's own updates: checked on GitHub Releases, installed when no agent is working.
 const updates = startAppUpdates({ busy: () => state.sessions.some(task => isRunning(task.id)), notify });
 {
   const pill = $('#update-status');
@@ -4047,7 +4045,7 @@ const updates = startAppUpdates({ busy: () => state.sessions.some(task => isRunn
     const current = updates.state;
     pill.hidden = current.kind !== 'ready' && current.kind !== 'installing';
     if (current.kind !== 'ready' && current.kind !== 'installing') return;
-    pill.title = current.kind === 'ready' ? `PandaCode ${current.version} is ready. Restart now, or it restarts on its own when your agents are done.` : `Installing ${current.version}…`;
+    pill.title = current.kind === 'ready' ? `WolinetIDE ${current.version} is ready. Restart now, or it restarts on its own when your agents are done.` : `Installing ${current.version}…`;
     (pill as HTMLButtonElement).disabled = current.kind === 'installing';
   };
   updates.subscribe(paint);

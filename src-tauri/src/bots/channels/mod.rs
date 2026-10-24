@@ -321,7 +321,7 @@ pub(crate) async fn handle_inbound(app: &tauri::AppHandle, channel_id: &str, sen
         Err((channel, Some(code), bot)) => {
             let _ = app.emit("bots-changed", ());
             let _ = app.emit("bot-pairing", json!({"botId": channel.bot_id, "channelId": channel_id, "senderName": sender_name, "code": code}));
-            let _ = send(app, channel_id, thread, &format!("Hi! I'm {bot}. To talk with me, the owner needs to approve pairing code {code} in PandaCode (Bots → {bot} → Channels).")).await;
+            let _ = send(app, channel_id, thread, &format!("Hi! I'm {bot}. To talk with me, the owner needs to approve pairing code {code} in WolinetAi (Bots → {bot} → Channels).")).await;
         }
         Err(_) => {}
     }
@@ -359,7 +359,7 @@ pub(crate) fn client() -> Result<reqwest::Client> {
         .https_only(true)
         .connect_timeout(std::time::Duration::from_secs(10))
         .timeout(std::time::Duration::from_secs(70))
-        .user_agent(concat!("PandaCode/", env!("CARGO_PKG_VERSION")))
+        .user_agent(concat!("WolinetAi/", env!("CARGO_PKG_VERSION")))
         .build()
         .map_err(|e| e.to_string())
 }

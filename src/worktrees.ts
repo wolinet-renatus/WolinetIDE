@@ -31,7 +31,7 @@ export type WorktreeHost = {
   archive(session: Session): Promise<void>;
   /** Extra menu rows from integrations, with their own handler. */
   extraItems(session: Session): ChoiceItem[];
-  /** The computer control (PandaCode Connect) for the context bar; empty when there is none. */
+  /** The computer control (Wolinet Connect) for the context bar; empty when there is none. */
   computer(session: Session, fresh: boolean): string;
   onExtra(id: string, session: Session, anchor: HTMLElement): Promise<void> | void;
 };

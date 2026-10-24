@@ -112,7 +112,7 @@ fn manage(app: &tauri::AppHandle, sims: &Simulators, args: &Value) -> Result<Val
         }
         "show" => {
             sims.select(Some(device.udid.clone()))?;
-            format!("Showing {} in PandaCode's Simulator panel.", device.name)
+            format!("Showing {} in WolinetAI's Simulator panel.", device.name)
         }
         "install" => super::install(&device.udid, &PathBuf::from(need("path")?))?,
         "launch" => super::launch(&device.udid, &need("bundleId")?)?,
@@ -180,7 +180,7 @@ async fn dispatch(app: tauri::AppHandle, name: String, args: Value) -> Result<Va
             }
             "pandacode_simulator_control" => control(&sims, &args),
             "pandacode_simulator_manage" => manage(&app, &sims, &args),
-            _ => Err("Unknown PandaCode tool.".into()),
+            _ => Err("Unknown WolinetAI tool.".into()),
         }
     })
     .await
@@ -213,7 +213,7 @@ pub fn with_simulator(base: Option<ToolHost>, app: tauri::AppHandle, stopped: Ar
                 if !name.starts_with("pandacode_simulator_") {
                     return match base {
                         Some(base) => (base.handler)(name, args).await,
-                        None => Err("Unknown PandaCode tool.".into()),
+                        None => Err("Unknown WolinetAI tool.".into()),
                     };
                 }
                 validate_spec(&catalog(), &name, &args)?;

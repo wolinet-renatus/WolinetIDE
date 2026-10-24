@@ -1,4 +1,4 @@
-// Downloads the latest PandaCode release, verifies its Tauri updater (minisign)
+// Downloads the latest WolinetIDE release, verifies its Tauri updater (minisign)
 // signature with node:crypto, and installs it. Zero dependencies.
 import { createHash, createPublicKey, verify } from 'node:crypto';
 import { spawnSync, spawn } from 'node:child_process';
@@ -88,8 +88,8 @@ function installMac(archive, dir) {
   if (!existsSync(app)) throw new Error('The archive does not contain PandaCode.app.');
   let root = '/Applications';
   try { accessSync(root, constants.W_OK); } catch { root = join(homedir(), 'Applications'); mkdirSync(root, { recursive: true }); }
-  const target = join(root, 'PandaCode.app');
-  const old = join(root, `.PandaCode-old-${process.pid}.app`);
+  const target = join(root, 'WolinetIDE.app');
+  const old = join(root, `.WolinetIDE-old-${process.pid}.app`);
   if (existsSync(target)) renameSync(target, old);
   try { renameSync(app, target); } catch { // different volume
     const copy = run('cp', ['-R', app, target]);
@@ -98,7 +98,7 @@ function installMac(archive, dir) {
   rmSync(old, { recursive: true, force: true });
   const macos = join(target, 'Contents', 'MacOS');
   const names = readdirSync(macos);
-  const binary = names.find(n => n === 'pandacode') ?? names[0];
+  const binary = names.find(n => n === 'wolinetide' || n === 'wolinet-ide' || n === 'WolinetIDE') ?? names[0];
   const sign = run(join(macos, binary), ['--local-sign']);
   if (sign.status !== 0) throw new Error(`Local signing failed:\n${sign.stdout}${sign.stderr}`);
   run('open', [target]);
@@ -109,8 +109,8 @@ function installWindows(setup) {
   const result = run(setup, ['/S'], { stdio: 'inherit' });
   if (result.status !== 0) throw new Error(`The installer exited with ${result.status}.`);
   const base = process.env.LOCALAPPDATA ?? join(homedir(), 'AppData', 'Local');
-  const exe = ['PandaCode', 'Programs\\PandaCode'].map(d => join(base, d, 'PandaCode.exe')).find(existsSync);
-  if (!exe) return 'PandaCode (installed; start it from the Start menu)';
+  const exe = ['WolinetIDE', 'Programs\\WolinetIDE'].map(d => join(base, d, 'WolinetIDE.exe')).find(existsSync);
+  if (!exe) return 'WolinetIDE (installed; start it from the Start menu)';
   spawn(exe, [], { detached: true, stdio: 'ignore' }).unref();
   return exe;
 }
@@ -121,19 +121,19 @@ function installLinux(appImage) {
   mkdirSync(bin, { recursive: true });
   mkdirSync(join(share, 'applications'), { recursive: true });
   mkdirSync(join(share, 'icons'), { recursive: true });
-  const target = join(bin, 'pandacode');
+  const target = join(bin, 'wolinetide');
   copyFileSync(appImage, target);
   chmodSync(target, 0o755);
-  const icon = join(share, 'icons', 'pandacode.png');
+  const icon = join(share, 'icons', 'wolinetide.png');
   copyFileSync(join(dirname(fileURLToPath(import.meta.url)), 'icon.png'), icon);
-  writeFileSync(join(share, 'applications', 'pandacode.desktop'), desktopEntry(target, icon));
+  writeFileSync(join(share, 'applications', 'wolinetide.desktop'), desktopEntry(target, icon));
   spawn(target, [], { detached: true, stdio: 'ignore' }).unref();
   return target;
 }
 
 export async function install({ dryRun = false } = {}) {
   const asset = assetFor();
-  const dir = mkdtempSync(join(tmpdir(), 'pandacode-'));
+  const dir = mkdtempSync(join(tmpdir(), 'wolinet-'));
   try {
     const file = join(dir, asset);
     const [data, sig] = [await download(`${BASE}/${asset}`, asset), await download(`${BASE}/${asset}.sig`, `${asset}.sig`)];
@@ -142,7 +142,7 @@ export async function install({ dryRun = false } = {}) {
     if (dryRun) return console.log('Dry run: nothing installed.');
     writeFileSync(file, data);
     const where = process.platform === 'darwin' ? installMac(file, dir) : process.platform === 'win32' ? installWindows(file) : installLinux(file);
-    console.log(`Installed PandaCode at ${where}`);
+    console.log(`Installed WolinetIDE at ${where}`);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

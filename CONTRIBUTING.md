@@ -1,6 +1,6 @@
-# Contributing to PandaCode
+# Contributing to WolinetIDE
 
-Thanks for helping. PandaCode is an open-source desktop app (MIT-based
+Thanks for helping. WolinetIDE is an open-source desktop app (MIT-based
 [PandaCode License](LICENSE)) built with Tauri 2
 (Rust in `src-tauri/`), plain TypeScript (`src/`) and an Astro website
 (`website/`). This guide covers setup, checks and pull requests. Code
@@ -30,8 +30,8 @@ not in public issues.
 ## Set up and run
 
 ```sh
-git clone https://github.com/wolinet-renatus/pandacode.git
-cd pandacode
+git clone https://github.com/wolinet-renatus/WolinetIDE.git
+cd WolinetIDE
 npm ci
 npm run tauri dev      # or: npm run desktop
 ```
@@ -43,7 +43,7 @@ for every new IPC command.
 
 Never point a development build at your real data with risky changes: pass a
 different identifier, for example
-`npx tauri dev --config '{"identifier":"ai.pandacode.dev"}'`.
+`npx tauri dev --config '{"identifier":"ai.wolinet.dev"}'`.
 
 To build an installer for your OS: `npm run tauri build`, or
 `npm run release:build` for the same packaging the release workflow uses (see

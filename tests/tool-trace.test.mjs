@@ -20,8 +20,8 @@ test('describes each kind as a verb, chip and object', () => {
     [tool('Task', { description: 'Find callers', subagent_type: 'Explore' }), 'agent', 'Started', 'Explore', 'Find callers'],
     [tool('Skill', { skill: 'hyperframes' }), 'skill', 'Loaded skill', 'hyperframes', ''],
     [tool('mcp__github__list_issues', {}), 'mcp', 'Used', 'github', 'list issues'],
-    [tool('pandacode_dispatch_workers', { workers: [{}, {}] }), 'mcp', 'Dispatched', 'PandaCode', '2 workers'],
-    [tool('pandacode_architect_pandacode_title', { title: 'Traces' }), 'mcp', 'Named', 'PandaCode', 'the task “Traces”'],
+    [tool('pandacode_dispatch_workers', { workers: [{}, {}] }), 'mcp', 'Dispatched', 'WolinetAI', '2 workers'],
+    [tool('pandacode_architect_pandacode_title', { title: 'Traces' }), 'mcp', 'Named', 'WolinetAI', 'the task “Traces”'],
     [tool('Frobnicate', { path: 'x/y' }), 'tool', 'Used', 'Frobnicate', 'x/y'],
   ];
   for (const [input, kind, verb, chip, object] of cases) {

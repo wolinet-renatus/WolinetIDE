@@ -38,9 +38,9 @@ fn load(dir: &Path) -> crate::Result<Secrets> {
     let text = match std::fs::read_to_string(&path) {
         Ok(text) => text,
         Err(error) if error.kind() == std::io::ErrorKind::NotFound => return Ok(Secrets::default()),
-        Err(error) => return Err(format!("Could not read PandaCode Connect secrets at {}: {error}", path.display())),
+        Err(error) => return Err(format!("Could not read Wolinet Connect secrets at {}: {error}", path.display())),
     };
-    serde_json::from_str(&text).map_err(|error| format!("PandaCode Connect secrets at {} are corrupt: {error}", path.display()))
+    serde_json::from_str(&text).map_err(|error| format!("Wolinet Connect secrets at {} are corrupt: {error}", path.display()))
 }
 
 /// Replaces the stored secrets with `change(current)`; an empty result deletes the file.
@@ -52,17 +52,17 @@ pub(crate) fn update(dir: &Path, change: impl FnOnce(Secrets) -> Secrets) -> cra
         .write(true)
         .open(dir.join(LOCK))
         .and_then(|file| file.lock().map(|_| file))
-        .map_err(|e| format!("Could not lock PandaCode Connect secrets: {e}"))?;
+        .map_err(|e| format!("Could not lock Wolinet Connect secrets: {e}"))?;
     let next = change(load(dir)?);
     let path = dir.join(FILE);
     if next == Secrets::default() {
         return match std::fs::remove_file(&path) {
-            Err(error) if error.kind() != std::io::ErrorKind::NotFound => Err(format!("Could not remove PandaCode Connect secrets: {error}")),
+            Err(error) if error.kind() != std::io::ErrorKind::NotFound => Err(format!("Could not remove Wolinet Connect secrets: {error}")),
             _ => Ok(()),
         };
     }
     let text = serde_json::to_vec(&next).map_err(|e| e.to_string())?;
-    let saved = write_atomic(dir, &path, &text).map_err(|e| format!("Could not save PandaCode Connect secrets: {e}"));
+    let saved = write_atomic(dir, &path, &text).map_err(|e| format!("Could not save Wolinet Connect secrets: {e}"));
     drop(lock);
     saved
 }

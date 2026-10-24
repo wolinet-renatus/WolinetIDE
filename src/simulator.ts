@@ -302,7 +302,7 @@ export function mountSimulator(root: HTMLElement, host: SimulatorHost) {
       }
     } finally { poseBusy = false; poseWanted = undefined; render(); pump(); }
   }
-  /** The Duo's hinge can move outside PandaCode (Xcode's Device Hub), so follow the real pose while it is on screen. */
+  /** The Duo's hinge can move outside WolinetIDE (Xcode's Device Hub), so follow the real pose while it is on screen. */
   function watchPose(): void {
     clearInterval(poll); poll = 0;
     if (!visible || disposed) return;

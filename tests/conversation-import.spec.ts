@@ -39,11 +39,11 @@ test('imports selected Claude Code conversations into their projects and marks t
   await expect(page.getByRole('region', { name: 'orbit tasks', exact: true })).toContainText('Fix login redirect loop');
   await expect(page.getByRole('region', { name: 'marketing-site tasks', exact: true })).toContainText('Draft the pricing page copy');
   await expect(page.locator('.task-item.selected .task-title')).toHaveText('Fix login redirect loop');
-  await expect(page.locator('#transcript')).toContainText('This conversation was imported into PandaCode.');
+  await expect(page.locator('#transcript')).toContainText('This conversation was imported into WolinetAi.');
 
   await page.getByRole('button', { name: 'Import conversations', exact: true }).click();
   await expect(row(page, 'Fix login redirect loop').getByRole('checkbox')).toBeDisabled();
-  await row(page, 'Draft the pricing page copy').getByRole('button', { name: 'In PandaCode' }).click();
+  await row(page, 'Draft the pricing page copy').getByRole('button', { name: 'In WolinetAi' }).click();
   await expect(dialog(page)).toBeHidden();
   await expect(page.locator('.task-item.selected .task-title')).toHaveText('Draft the pricing page copy');
 });

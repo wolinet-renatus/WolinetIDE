@@ -334,7 +334,7 @@ fn builtins_for_platform(platform: &str) -> Vec<SlashCommand> {
             name,
             description,
             hint,
-            "PandaCode",
+            "WolinetAi",
             Invocation::Action(action.into()),
             None,
         ));
@@ -482,7 +482,7 @@ fn builtins_for_platform(platform: &str) -> Vec<SlashCommand> {
             name,
             description,
             hint,
-            "PandaCode",
+            "WolinetAi",
             Invocation::Action(action.into()),
             None,
         ));

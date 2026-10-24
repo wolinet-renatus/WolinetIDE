@@ -231,7 +231,7 @@ function h<K extends keyof HTMLElementTagNameMap>(tag: K, props: Props = {}, ...
 export async function renderBlock(kind: string, source: string): Promise<HTMLElement> {
   const host = h('div', { class: 'gu' });
   if (kind === 'mermaid') {
-    // No diagram renderer ships with PandaCode: show the source, labelled and copyable.
+    // No diagram renderer ships with WolinetIDE: show the source, labelled and copyable.
     host.append(codeView('Diagram · Mermaid', source));
     return host;
   }

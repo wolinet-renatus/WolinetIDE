@@ -100,7 +100,7 @@ fn aws_refusal(words: &[String]) -> Result<(), String> {
         }
     }
     match positional.as_slice() {
-        ["configure", ..] => Err("aws configure is not available: PandaCode manages the AWS login.".into()),
+        ["configure", ..] => Err("aws configure is not available: WolinetAi manages the AWS login.".into()),
         ["sts", op, ..] if STS_CREDENTIALS.contains(op) => Err(format!("aws sts {op} returns credentials, which never reach the agent.")),
         _ => Ok(()),
     }
@@ -109,7 +109,7 @@ fn aws_refusal(words: &[String]) -> Result<(), String> {
 /// Refuse Railway commands outside deploys: the login, local shells, the raw API.
 fn railway_refusal(words: &[String]) -> Result<(), String> {
     match words.iter().find(|w| !w.starts_with('-')) {
-        Some(command) if !RAILWAY_ALLOWED.contains(&command.as_str()) => Err(format!("railway {command} is not available here: PandaCode manages the Railway login, and this tool runs deploy commands (init, link, up, domain, variable, logs, status…).")),
+        Some(command) if !RAILWAY_ALLOWED.contains(&command.as_str()) => Err(format!("railway {command} is not available here: WolinetAi manages the Railway login, and this tool runs deploy commands (init, link, up, domain, variable, logs, status…).")),
         _ => Ok(()),
     }
 }
@@ -143,7 +143,7 @@ fn gcloud_refusal(words: &[String]) -> Result<(), String> {
     let command = match positional.first() { Some(&("alpha" | "beta" | "preview")) => &positional[1..], _ => &positional[..] };
     let starts = |prefix: &&[&str]| command.starts_with(prefix);
     if GCLOUD_REFUSED.iter().any(starts) && !GCLOUD_ALLOWED.iter().any(starts) {
-        return Err(format!("gcloud {} is not available here: PandaCode uses your gcloud login, and credentials never reach the agent.", command.iter().take(4).copied().collect::<Vec<_>>().join(" ")));
+        return Err(format!("gcloud {} is not available here: WolinetAi uses your gcloud login, and credentials never reach the agent.", command.iter().take(4).copied().collect::<Vec<_>>().join(" ")));
     }
     Ok(())
 }
@@ -294,7 +294,7 @@ fn run(checkout: &Path, args: &Value) -> Result<Value, String> {
         return Err("args runs one CLI command; pipes, redirects and chaining are not supported.".into());
     }
     if words.iter().any(|w| w == "--token" || w.starts_with("--token=")) {
-        return Err("PandaCode adds the credentials itself; leave out --token.".into());
+        return Err("WolinetAi adds the credentials itself; leave out --token.".into());
     }
     match tool {
         "aws" => aws_refusal(&words)?,
@@ -348,7 +348,7 @@ pub fn with_deploy(base: Option<ToolHost>, app: tauri::AppHandle, session_id: St
                 if name != "pandacode_cloud_cli" {
                     return match base {
                         Some(base) => (base.handler)(name, args).await,
-                        None => Err("Unknown PandaCode tool.".into()),
+                        None => Err("Unknown WolinetAI tool.".into()),
                     };
                 }
                 validate_spec(&catalog(), &name, &args)?;

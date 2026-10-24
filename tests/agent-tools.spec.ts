@@ -30,7 +30,7 @@ test('agent tools inventory is lazy, distinguishes sample data and keeps task ca
   await page.getByRole('button', { name: 'Manage', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Tools & integrations' })).toBeVisible();
   await expect(page.getByText('Browser preview · integration status is sample data.')).toBeVisible();
-  await page.locator('summary').filter({ hasText: 'PandaCode tools' }).click();
+  await page.locator('summary').filter({ hasText: 'WolinetAI tools' }).click();
   await expect(page.getByText(/Older tasks keep their original catalog/)).toBeVisible();
   await expect(page.getByText(/When enabled, Jev joins new and resumed tasks across connected harnesses/)).toBeVisible();
   await page.locator('summary').filter({ hasText: 'Preview documentation' }).click();

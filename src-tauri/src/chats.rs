@@ -15,7 +15,13 @@ type Result<T> = std::result::Result<T, String>;
 const OWN_FILES: [&str; 2] = [".pandacode", ".DS_Store"];
 
 pub(crate) fn root() -> PathBuf {
-    crate::agent_usage_providers::home().unwrap_or_else(std::env::temp_dir).join("PandaCode Chats")
+    let base = crate::agent_usage_providers::home().unwrap_or_else(std::env::temp_dir);
+    let legacy = base.join("PandaCode Chats");
+    if legacy.exists() {
+        legacy
+    } else {
+        base.join("WolinetAi Chats")
+    }
 }
 
 fn in_root(folder: &Path, root: &Path) -> bool {
@@ -25,7 +31,8 @@ fn in_root(folder: &Path, root: &Path) -> bool {
 
 /// Whether a task folder is a projectless chat's.
 pub(crate) fn is_chat_folder(folder: &Path) -> bool {
-    in_root(folder, &root())
+    let base = crate::agent_usage_providers::home().unwrap_or_else(std::env::temp_dir);
+    in_root(folder, &base.join("WolinetAi Chats")) || in_root(folder, &base.join("PandaCode Chats"))
 }
 
 /// Makes the chat's folder, registers it as a project and starts its task.

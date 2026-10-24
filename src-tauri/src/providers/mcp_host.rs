@@ -397,7 +397,7 @@ impl Context {
                     .as_str()
                     .filter(|version| matches!(*version, "2025-03-26" | "2025-06-18"))
                     .unwrap_or("2025-03-26");
-                json!({"protocolVersion":version,"capabilities":{"tools":{"listChanged":false}},"serverInfo":{"name":"PandaCode architect","version":"0.1.0"}})
+                json!({"protocolVersion":version,"capabilities":{"tools":{"listChanged":false}},"serverInfo":{"name":"WolinetAi architect","version":"0.1.0"}})
             }
             "ping" => json!({}),
             "tools/list" => {
