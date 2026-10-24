@@ -62,7 +62,7 @@ test('a VS Code theme from Open VSX recolors the app and holds still when the wa
   await page.waitForTimeout(300);
   expect(await accent(page)).toBe(dracula);
   expect(await token(page, '--bg')).toBe('#282a36');
-  // Import from a file, then go back to PandaCode's own colors.
+  // Import from a file, then go back to WolinetIDE's own colors.
   await openColors(page);
   await page.getByRole('button', { name: 'Import .vsix…' }).click();
   await expect(page.locator('.vsix-status')).toContainText('Using Tokyo Night');
@@ -70,11 +70,11 @@ test('a VS Code theme from Open VSX recolors the app and holds still when the wa
   await page.getByRole('button', { name: 'Remove Tokyo Night' }).click();
   await expect(page.locator('.vsix-status')).toContainText('Theme removed');
   await expect(page.locator('html')).not.toHaveAttribute('data-vsix', '');
-  await expect(page.getByRole('radio', { name: /(Wolinet|PandaCode)/ })).toHaveAttribute('aria-checked', 'true');
+  await expect(page.getByRole('radio', { name: /Wolinet/ })).toHaveAttribute('aria-checked', 'true');
   await expect(page.getByRole('radio', { name: 'Wallpaper', exact: true })).toBeEnabled();
 });
 
-test('the light and dark toggle leaves a VS Code theme for PandaCode\'s own palette', async ({ page }) => {
+test('the light and dark toggle leaves a VS Code theme for WolinetIDE\'s own palette', async ({ page }) => {
   await page.goto('/');
   await openColors(page);
   await page.getByRole('radio', { name: /GitHub Light Default/ }).click();
