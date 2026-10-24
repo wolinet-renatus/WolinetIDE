@@ -4,7 +4,7 @@ import { readdir, readFile } from 'node:fs/promises';
 const repo = 'https://github.com/wolinet-renatus/WolinetIDE';
 
 /* The reading pages: /changelog lists every releases/X.Y.Z.md, /privacy states that
- * PandaCode collects nothing, /license carries the LICENSE text word for word, and all three work without scripts. */
+ * WolinetIDE collects nothing, /license carries the LICENSE text word for word, and all three work without scripts. */
 const test = base.extend<{ browserHealth: void }>({
   browserHealth: [async ({ page }, use) => {
     const errors: string[] = [];
@@ -56,7 +56,7 @@ test('changelog lists every release, newest first, with dates and working anchor
   await expect(page.locator('.nav-links a[aria-current="page"]')).toHaveText('Changelog');
 });
 
-test('privacy policy says PandaCode collects nothing, with a contents rail', async ({ page }) => {
+test('privacy policy says WolinetIDE collects nothing, with a contents rail', async ({ page }) => {
   await page.goto('/privacy/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Privacy, plainly put.');
   await expect(page.locator('.legal-updated time')).toHaveAttribute('datetime', /^\d{4}-\d{2}-\d{2}$/);
@@ -78,14 +78,14 @@ test('privacy policy says PandaCode collects nothing, with a contents rail', asy
   await expect(page.locator('.legal-toc a.is-current')).toHaveText('This website');
   await expect(prose.getByRole('link', { name: 'GitHub issues' })).toHaveAttribute('href', `${repo}/issues`);
   await expect(prose.getByRole('link', { name: 'security policy' })).toHaveAttribute('href', `${repo}/security/policy`);
-  await expect(prose.getByRole('link', { name: 'PandaCode License' })).toHaveAttribute('href', '/license/');
+  await expect(prose.getByRole('link', { name: 'WolinetIDE License' })).toHaveAttribute('href', '/license/');
   await expect(page.locator('.nav-links a[aria-current="page"]')).toHaveText('Privacy');
   await expectNoOverflow(page);
 });
 
 test('license page carries LICENSE word for word, including the fork credit, and the agent permissions note', async ({ page }) => {
   await page.goto('/license/');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('The PandaCode License.');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('The WolinetIDE License.');
   // Same paragraphs as the repository's LICENSE; only quote marks are typeset.
   const normalize = (text: string) => text.replace(/[“”]/g, '"').replace(/’/g, "'").replace(/\s+/g, ' ').trim();
   const license = (await readFile(new URL('../../LICENSE', import.meta.url), 'utf8')).split(/\n\s*\n/).map(normalize).filter(Boolean);

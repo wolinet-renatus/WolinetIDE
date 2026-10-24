@@ -84,8 +84,8 @@ function installMac(archive, dir) {
   mkdirSync(extracted);
   const tar = run('tar', ['-xzf', archive, '-C', extracted]);
   if (tar.status !== 0) throw new Error(`tar failed: ${tar.stderr}`);
-  const app = join(extracted, 'PandaCode.app');
-  if (!existsSync(app)) throw new Error('The archive does not contain PandaCode.app.');
+  const app = join(extracted, 'WolinetIDE.app');
+  if (!existsSync(app)) throw new Error('The archive does not contain WolinetIDE.app.');
   let root = '/Applications';
   try { accessSync(root, constants.W_OK); } catch { root = join(homedir(), 'Applications'); mkdirSync(root, { recursive: true }); }
   const target = join(root, 'WolinetIDE.app');

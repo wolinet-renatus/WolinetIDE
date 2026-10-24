@@ -53,11 +53,11 @@ export function version(value) {
 
 export async function json(path) { return JSON.parse(await readFile(path, 'utf8')); }
 
-/** Cargo.lock text with the `pandacode` package at `next`. Keeps the file's line endings,
+/** Cargo.lock text with the `wolinet-ide` package at `next`. Keeps the file's line endings,
  * so a Windows checkout with CRLF is updated too, and fails instead of leaving it unchanged. */
 export function cargoLockVersion(lock, next) {
-  const entry = /(\[\[package\]\]\r?\nname = "pandacode"\r?\nversion = )"[^"]+"/;
-  if (!entry.test(lock)) throw new Error('No pandacode package in src-tauri/Cargo.lock.');
+  const entry = /(\[\[package\]\]\r?\nname = "wolinet-ide"\r?\nversion = )"[^"]+"/;
+  if (!entry.test(lock)) throw new Error('No wolinet-ide package in src-tauri/Cargo.lock.');
   return lock.replace(entry, `$1"${version(next)}"`);
 }
 

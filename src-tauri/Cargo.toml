@@ -1,12 +1,12 @@
 [package]
-name = "pandacode"
+name = "wolinet-ide"
 version = "0.3.31"
 description = "A lightweight native workspace for coding agents — managed by Wolinet Technology"
 authors = ["Wolinet Technology"]
 edition = "2021"
 
 [lib]
-name = "pandacode_lib"
+name = "wolinet_ide_lib"
 # Desktop only links the rlib; add "staticlib", "cdylib" back for mobile targets.
 crate-type = ["rlib"]
 

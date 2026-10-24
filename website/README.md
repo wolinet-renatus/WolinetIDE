@@ -63,7 +63,7 @@ signatures and checksum files in static assets: **builds belong on GitHub Releas
 never in `website/public` or `website/dist`.**
 
 The site deploys as a static-assets-only Cloudflare Worker (`wrangler.jsonc`, Worker
-name `pandacode-site`, serving `./dist` with `_headers` applied). From `website/`:
+name `wolinet-site`, serving `./dist` with `_headers` applied). From `website/`:
 
 ```sh
 ASTRO_TELEMETRY_DISABLED=1 npm run build
@@ -86,6 +86,6 @@ ASTRO_TELEMETRY_DISABLED=1 npx playwright test
 Tests cover Chrome and WebKit, desktop and mobile, and reduced motion: the landing
 page's controls and copy, download and source links, the What's New scenes, the reading
 pages, pages without JavaScript, phone-width overflow, and that every request the site
-makes is same-origin. Set `PANDACODE_SITE_URL` to test another server (for example a
+makes is same-origin. Set `WOLINET_SITE_URL` to test another server (for example a
 production preview or a dev server on another port). Screenshots and traces go under
-`/private/tmp/pandacode-landing-checks`.
+`/private/tmp/wolinet-landing-checks`.

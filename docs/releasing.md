@@ -51,9 +51,9 @@ a new key; if it leaks, rotate it the same way. The maintainer's copy lives outs
 repository (never commit it). Update downloads need the release to be publicly
 readable, so automatic updates start working once the repository is public.
 
-## `npx pandacode`
+## `npx wolinetide`
 
-`packages/npx` is the `pandacode` npm package: it downloads the latest release asset
+`packages/npx` is the `wolinetide` npm package: it downloads the latest release asset
 (the updater file and its `.sig`), verifies the signature against the public key in
 `tauri.conf.json` and installs it; on macOS it then runs the app with `--local-sign`.
 The `npm` job in `release.yml` publishes it on tag runs with the release version, using
@@ -63,7 +63,7 @@ and skips. If the update key is ever rotated, update `PUBKEY` in
 
 ## Homebrew
 
-The tap [wolinet-renatus/homebrew-pandacode](https://github.com/wolinet-renatus/homebrew-pandacode)
+The tap [wolinet-renatus/homebrew-wolinetide](https://github.com/wolinet-renatus/homebrew-wolinetide)
 updates itself: every 3 hours it reads the latest release and its `.sha256` files and
 commits the new version, so a release needs no step here and no secret in this
 repository. To pick up a release sooner, run its `update` workflow by hand. Asset names

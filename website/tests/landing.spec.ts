@@ -1,7 +1,7 @@
 import { test as base, expect, type Page, type TestInfo } from '@playwright/test';
 import { mkdir, writeFile } from 'node:fs/promises';
 
-const screenshots = '/private/tmp/pandacode-landing-checks';
+const screenshots = '/private/tmp/wolinet-landing-checks';
 const repo = 'https://github.com/wolinet-renatus/WolinetIDE';
 const releases = `${repo}/releases/latest`;
 const issues = `${repo}/issues`;
@@ -21,7 +21,7 @@ const test = base.extend<{ browserHealth: void }>({
 });
 
 async function capture(page: Page, info: TestInfo, name: string) {
-  const live = Boolean(process.env.PANDACODE_SITE_URL);
+  const live = Boolean(process.env.WOLINET_SITE_URL);
   // WebKit always injects a stylesheet to sync screenshots, even with animations/carets unchanged.
   // Keep live CSP assertions strict; collect WebKit visual references in the local runs.
   if (live && info.project.use.browserName === 'webkit') return;
@@ -71,7 +71,7 @@ test('hero, supported harnesses, and complete page have valid resources and resp
   await expect(page.locator('#preview-notes')).toContainText('free, open-source software');
   await expect(page.locator('#preview-notes')).toContainText('provider subscriptions and model usage are separate');
   await expect(page.locator('#preview-notes')).toContainText('Apple silicon Macs, Windows x64, and Linux x64 are published on GitHub Releases');
-  await expect(page.locator('#preview-notes').getByRole('link', { name: 'PandaCode License' })).toHaveAttribute('href', '/license/');
+  await expect(page.locator('#preview-notes').getByRole('link', { name: 'MIT-based license' })).toHaveAttribute('href', '/license/');
   await expect(page.locator('#preview-notes').getByRole('link', { name: /Report an issue/ })).toHaveAttribute('href', issues);
   await expect.poll(() => page.locator('img:visible').evaluateAll(images => images.filter(image => !(image as HTMLImageElement).complete || !(image as HTMLImageElement).naturalWidth).map(image => (image as HTMLImageElement).src))).toEqual([]);
   const resources = await page.evaluate(() => performance.getEntriesByType('resource').map(entry => {
@@ -203,7 +203,7 @@ test('download and source links go to GitHub, open safely, and fetch nothing unt
   }
   await expect(page.locator('[data-checkout], .checkout-feedback, .noscript-note')).toHaveCount(0);
   await expect(page.locator('a[href*="/account"], a[href*="/terms"], a[href*="featurebase"]')).toHaveCount(0);
-  await expect(page.locator('body')).not.toContainText(/\$20|Stripe|Opening checkout|Cancel anytime|two devices|PandaCode Pro/i);
+  await expect(page.locator('body')).not.toContainText(/\$20|Stripe|Opening checkout|Cancel anytime|two devices/i);
   expect(githubRequests).toEqual([]);
   const opened = context.waitForEvent('page');
   await hero.getByRole('link', {name: /Download WolinetIDE/}).click();
@@ -248,7 +248,7 @@ test('the site makes only same-origin requests and hosts no checkout, account or
   }
   const foreign = requests.filter(url => !url.startsWith('data:') && new URL(url).origin !== origin);
   expect(foreign, 'Every request should stay on this site').toEqual([]);
-  for (const path of ['/account', '/terms/', '/downloads/PandaCode-macOS-arm64.zip']) {
+  for (const path of ['/account', '/terms/', '/downloads/WolinetIDE-macOS-arm64.zip']) {
     expect((await request.get(path)).status(), path).toBe(404);
   }
 });

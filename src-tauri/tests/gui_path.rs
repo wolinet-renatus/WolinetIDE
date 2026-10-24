@@ -5,7 +5,7 @@
 #[test]
 fn children_of_a_finder_launch_find_homebrew_tools() {
     std::env::set_var("PATH", "/usr/bin:/bin");
-    pandacode_lib::prepare_environment();
+    wolinet_ide_lib::prepare_environment();
     let output = std::process::Command::new("sh").args(["-c", "printf %s \"$PATH\""]).output().expect("sh runs");
     let path = String::from_utf8(output.stdout).unwrap();
     let dirs: Vec<&str> = path.split(':').collect();

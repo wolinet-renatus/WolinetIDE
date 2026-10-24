@@ -156,7 +156,7 @@ async function main() {
       // WebView2 bootstrap may download its runtime on a clean runner.
       await observeProcess(installer, installArguments(destination), { env, cwd: directory, durationMs: 120_000, expectExit: true, windowsVerbatimArguments: true });
       const names = await readdir(destination);
-      const binaries = names.filter(name => name.toLowerCase() === 'pandacode.exe');
+      const binaries = names.filter(name => ['wolinet-ide.exe', 'wolinetide.exe'].includes(name.toLowerCase()));
       if (names.length > 100 || binaries.length !== 1) throw new Error('NSIS did not install the expected app executable.');
       await observeProcess(join(destination, binaries[0]), [], { env, cwd: directory, durationMs: 30_000 });
     }

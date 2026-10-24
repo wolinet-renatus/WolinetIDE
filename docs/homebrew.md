@@ -1,7 +1,7 @@
 # Homebrew
 
-PandaCode has an official tap,
-[wolinet-renatus/homebrew-pandacode](https://github.com/wolinet-renatus/homebrew-pandacode).
+WolinetIDE has an official tap,
+[wolinet-renatus/homebrew-wolinetide](https://github.com/wolinet-renatus/homebrew-wolinetide).
 
 ```sh
 brew install --cask wolinet-renatus/wolinetide/wolinetide   # macOS 12+, Apple silicon or Intel
@@ -10,15 +10,15 @@ brew install wolinet-renatus/wolinetide/wolinetide          # Linux x86_64 or aa
 
 ## What it installs
 
-- `Casks/pandacode.rb` installs `PandaCode.app` from the release's
-  `PandaCode-macOS-arm64.dmg` or `PandaCode-macOS-x64.dmg`, checked against the
-  sha256 in the cask. It sets `auto_updates true` because PandaCode updates itself,
+- `Casks/wolinetide.rb` installs `WolinetIDE.app` from the release's
+  `WolinetIDE-macOS-arm64.dmg` or `WolinetIDE-macOS-x64.dmg`, checked against the
+  sha256 in the cask. It sets `auto_updates true` because WolinetIDE updates itself,
   so `brew upgrade` leaves it alone unless you pass `--greedy`.
-  `brew uninstall --zap --cask pandacode` also removes PandaCode's own data under
-  `~/Library` (the `ai.pandacode.desktop` folders, caches, preferences and WebKit
-  storage). It never touches your projects or `~/PandaCode Chats`.
-- `Formula/pandacode.rb` installs `PandaCode-Linux-x86_64.AppImage` or
-  `PandaCode-Linux-aarch64.AppImage` as `bin/pandacode`. It is Linux-only
+  `brew uninstall --zap --cask wolinetide` also removes WolinetIDE's own data under
+  `~/Library` (the `com.wolinet.ide` folders, caches, preferences and WebKit
+  storage). It never touches your projects or `~/WolinetIDE Chats`.
+- `Formula/wolinetide.rb` installs `WolinetIDE-Linux-x86_64.AppImage` or
+  `WolinetIDE-Linux-aarch64.AppImage` as `bin/wolinetide`. It is Linux-only
   (`depends_on :linux`); on macOS use the cask. AppImages may need FUSE 2 (`libfuse2`).
 
 The cask has no preflight or postflight scripts and does not remove the quarantine
@@ -26,9 +26,9 @@ flag, so macOS shows its usual first-launch prompt for an unsigned app.
 
 ## How it stays current
 
-The tap updates itself, so releasing PandaCode needs no change here and no secret in
+The tap updates itself, so releasing WolinetIDE needs no change here and no secret in
 this repository. Its `.github/workflows/update.yml` runs every 3 hours, on demand
-(`workflow_dispatch`) and on a `pandacode-release` repository dispatch. It:
+(`workflow_dispatch`) and on a `wolinetide-release` repository dispatch. It:
 
 1. reads the latest release tag of `wolinet-renatus/WolinetIDE` with `gh api` and stops
    unless it matches `^v\d+\.\d+\.\d+$`;

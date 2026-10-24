@@ -168,11 +168,11 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with: { node-version: '22', registry-url: 'https://registry.npmjs.org' }
-      - name: Publish npx pandacode
+      - name: Publish npx wolinetide
         working-directory: packages/npx
         run: |
           if [ -z "$NODE_AUTH_TOKEN" ]; then
-            echo "::warning::NPM_TOKEN is not set; skipping the npm publish of pandacode."
+            echo "::warning::NPM_TOKEN is not set; skipping the npm publish of wolinetide."
             exit 0
           fi
           npm version "$VERSION" --no-git-tag-version --allow-same-version

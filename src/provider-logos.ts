@@ -24,7 +24,7 @@ const logos: Partial<Record<ProviderId, string>> = {
 export function providerLogo(id: ProviderId, cls = ''): string {
   const className = `provider-logo${cls ? ` ${escape(cls)}` : ''}`;
   if (id === 'wolinet') {
-    return `<svg class="${className}" data-provider="wolinet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" width="20" height="20"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>`;
+    return `<svg class="${className}" data-provider="wolinet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" width="20" height="20"><path d="m12 2 8.5 4.9v9.8L12 21.6 3.5 16.7V6.9Zm0 2.6L5.5 8v7.6l6.5 3.8 6.5-3.8V8ZM8 9l1.8 5.5h1.5l1.7-3.5 1.7 3.5h1.5L18 9"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>`;
   }
   // Monochrome marks are inlined and drawn in the theme's text color.
   const inline = id === 'github-copilot' ? githubCopilotLogo : id === 'cline' ? clineLogo.replaceAll('#1C1C24', 'currentColor') : '';

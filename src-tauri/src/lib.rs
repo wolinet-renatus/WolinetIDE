@@ -3115,6 +3115,49 @@ async fn local_sign_app() -> Result<()> {
         .map_err(|e| e.to_string())?
 }
 
+/// Bundle identifier of builds released before WolinetIDE's own; the OS keyed their data folder by it.
+const PREVIOUS_IDENTIFIER: &str = "ai.pandacode.desktop";
+
+/// Moves the previous identifier's data folder (database, captures, settings, signing password)
+/// into `dir` once, so an upgrade keeps everything. Never overwrites: a non-empty `dir` wins.
+fn adopt_previous_data_dir(dir: &std::path::Path) {
+    let Some(previous) = dir.parent().map(|parent| parent.join(PREVIOUS_IDENTIFIER)) else { return };
+    if previous == dir || !previous.is_dir() {
+        return;
+    }
+    if std::fs::read_dir(dir).map(|mut entries| entries.next().is_some()).unwrap_or(false) {
+        return;
+    }
+    let _ = std::fs::remove_dir(dir);
+    if let Err(error) = std::fs::rename(&previous, dir) {
+        eprintln!("Could not move earlier app data into {}: {error}", dir.display());
+    }
+}
+
+#[cfg(test)]
+mod previous_data_dir_tests {
+    use super::{adopt_previous_data_dir, PREVIOUS_IDENTIFIER};
+
+    #[test]
+    fn moves_the_previous_folder_once_and_never_overwrites() {
+        let root = std::env::temp_dir().join(format!("wolinet-adopt-{}", uuid::Uuid::new_v4().simple()));
+        let previous = root.join(PREVIOUS_IDENTIFIER);
+        let current = root.join("com.wolinet.ide");
+        std::fs::create_dir_all(&previous).unwrap();
+        std::fs::write(previous.join("wolinet.sqlite3"), b"old").unwrap();
+        std::fs::create_dir_all(&current).unwrap(); // Empty: created by an earlier launch.
+        adopt_previous_data_dir(&current);
+        assert_eq!(std::fs::read(current.join("wolinet.sqlite3")).unwrap(), b"old");
+        assert!(!previous.exists());
+
+        std::fs::create_dir_all(&previous).unwrap();
+        std::fs::write(previous.join("wolinet.sqlite3"), b"stale").unwrap();
+        adopt_previous_data_dir(&current);
+        assert_eq!(std::fs::read(current.join("wolinet.sqlite3")).unwrap(), b"old");
+        std::fs::remove_dir_all(&root).unwrap();
+    }
+}
+
 pub fn run() {
     // The npx installer signs the fresh bundle this way, before any window exists.
     if std::env::args().skip(1).any(|arg| arg == "--local-sign") {
@@ -3136,6 +3179,7 @@ pub fn run() {
                 turn_changes::cleanup_cache(&cache.join("turn-captures"));
             }
             let dir = app.path().app_data_dir()?;
+            adopt_previous_data_dir(&dir);
             std::fs::create_dir_all(&dir)?;
             provider_settings::setup(&dir).map_err(std::io::Error::other)?;
             connections::setup(&dir).map_err(std::io::Error::other)?;
@@ -3143,7 +3187,7 @@ pub fn run() {
             if jev::setup(&dir).is_err() {
                 eprintln!("Jev settings are unavailable; browser testing remains disabled.");
             }
-            // Retain the database filename and bundle identifier so upgrades reuse existing data.
+            // Retain the database filename so upgrades reuse existing data.
             let db_path = dir.join("wolinet.sqlite3");
             if !db_path.exists() {
                 let legacy = dir.join("kingcode.sqlite3");
