@@ -8,7 +8,7 @@ import { resolve } from 'node:path';
 export const root = fileURLToPath(new URL('../../', import.meta.url));
 
 // One entry per published desktop build. `asset` is the stable file name on a
-// GitHub Release, so https://github.com/wolinet-renatus/pandacode/releases/latest/download/<asset>
+// GitHub Release, so https://github.com/wolinet-renatus/WolinetIDE/releases/latest/download/<asset>
 // always points at the newest build for that platform. `updater` is the signed file the
 // in-app updater installs (relative to the bundle directory), published as `updaterAsset`.
 export const targets = Object.freeze({
@@ -83,7 +83,7 @@ export function releaseDirectory(releaseVersion) {
  * its signature. `signatures` maps release targets to the contents of their `.sig` files.
  * Files are on the repository that publishes the release (GITHUB_REPOSITORY in Actions),
  * so a fork's release points at its own assets. */
-export function updaterManifest(releaseVersion, notes, signatures, pubDate = new Date().toISOString(), repository = process.env.GITHUB_REPOSITORY || 'wolinet-renatus/pandacode') {
+export function updaterManifest(releaseVersion, notes, signatures, pubDate = new Date().toISOString(), repository = process.env.GITHUB_REPOSITORY || 'wolinet-renatus/WolinetIDE') {
   const v = version(releaseVersion);
   if (!/^[A-Za-z0-9-]+\/[A-Za-z0-9._-]+$/.test(repository)) throw new Error(`Not a GitHub repository: ${repository}`);
   const platforms = {};

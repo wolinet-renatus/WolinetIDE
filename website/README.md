@@ -1,11 +1,11 @@
-# PandaCode website
+# WolinetIDE website
 
-The static PandaCode website: the landing page, the changelog,
-the privacy policy and the PandaCode License (MIT-based). PandaCode is free, open source and collects nothing,
+The static WolinetIDE website: the landing page, the changelog,
+the privacy policy and the license. WolinetIDE is free, open source and collects nothing,
 and the site follows suit: no cookies, no analytics, no remote fonts or scripts, and no
 third-party requests of any kind. Downloads link to
-[GitHub Releases](https://github.com/wolinet-renatus/pandacode/releases/latest); the source is at
-[github.com/wolinet-renatus/pandacode](https://github.com/wolinet-renatus/pandacode).
+[GitHub Releases](https://github.com/wolinet-renatus/WolinetIDE/releases/latest); the source is at
+[github.com/wolinet-renatus/WolinetIDE](https://github.com/wolinet-renatus/WolinetIDE).
 
 ## Development
 

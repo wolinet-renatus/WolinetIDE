@@ -131,4 +131,4 @@ a Windows Server runner, or Linux desktop behavior from Xvfb.
 Record unrun native checks and known limitations alongside each preview's
 results, even if CI packaging succeeds. Complete these checks before claiming
 stable support. Reports from real machines are welcome as
-[GitHub issues](https://github.com/wolinet-renatus/pandacode/issues).
+[GitHub issues](https://github.com/wolinet-renatus/WolinetIDE/issues).

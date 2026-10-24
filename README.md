@@ -8,7 +8,7 @@ fork **omp** (through Pi's RPC mode), and Meta's **Muse Code** (through its MSP
 protocol) — side by side, with your projects, Git, a
 terminal and a browser in one window.
 
-WolinetIDE is free and open source under the [MIT License](LICENSE) (originally forked from PandaCode). There is no
+WolinetIDE is an open-source project actively managed, maintained, and developed exclusively by **Wolinet Technology** under the [MIT License](LICENSE) (originally forked from PandaCode). From this moment forward, all software updates, bug fixes, enhancements, roadmap decisions, and security patches are developed and decided by Wolinet Technology. There is no
 account, no license key and no telemetry.
 
 Built with Tauri 2, Rust, SQLite and plain TypeScript. It uses the operating
@@ -284,6 +284,12 @@ npx playwright test -c playwright.webkit.config.ts   # WebKit
 
 Ordinary tests make no paid model calls. Opt-in live tests are `#[ignore]`d;
 see [providers](docs/providers.md).
+
+## Project Governance & Management
+
+WolinetIDE is actively managed, governed, and maintained exclusively by **Wolinet Technology**. All future fixes, releases, roadmap decisions, and security patches are developed and decided by Wolinet Technology.
+
+This project was originally forked from PandaCode and is developed independently under the MIT license.
 
 ## Contributing
 

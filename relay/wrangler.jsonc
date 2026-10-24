@@ -3,8 +3,7 @@
   "name": "wolinet-relay",
   "main": "src/index.ts",
   "compatibility_date": "2026-09-02",
-  // The bambooed.ai zone must be on the same Cloudflare account. Forks: use your own domain or remove this.
-  "routes": [{ "pattern": "relay.bambooed.ai", "custom_domain": true }],
+  // Custom domain route (optional): configure your own custom domain on your Cloudflare account if desired.
   "durable_objects": { "bindings": [{ "name": "ACCOUNT", "class_name": "Account" }] },
   "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Account"] }],
   "ratelimits": [

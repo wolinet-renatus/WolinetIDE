@@ -94,7 +94,7 @@ test('preview opens the GitHub issue tracker without sending customer or workspa
   await open(page, 'preview');
   await support(page).click();
   await expect.poll(() => page.evaluate(() => (window as any).__supportFixture.opened)).toEqual([
-    ['https://github.com/wolinet-renatus/pandacode/issues', '_blank', 'noopener,noreferrer'],
+    ['https://github.com/wolinet-renatus/WolinetIDE/issues', '_blank', 'noopener,noreferrer'],
   ]);
 });
 
@@ -126,15 +126,15 @@ test('Settings shows an About section with the version and GitHub links', async 
   await expect(about.locator('.settings-about-version')).toHaveText('Version Preview');
   const urls = await about.locator('[data-action="open-url"]').evaluateAll(nodes => nodes.map(node => (node as HTMLElement).dataset.url));
   expect(urls).toEqual(expect.arrayContaining([
-    'https://github.com/wolinet-renatus/pandacode',
-    'https://github.com/wolinet-renatus/pandacode/issues',
-    'https://github.com/wolinet-renatus/pandacode/releases',
+    'https://github.com/wolinet-renatus/WolinetIDE',
+    'https://github.com/wolinet-renatus/WolinetIDE/issues',
+    'https://github.com/wolinet-renatus/WolinetIDE/releases',
   ]));
   await expect(about.getByRole('button', { name: 'Releases', exact: true })).toBeVisible();
   await expect(about.getByRole('button', { name: 'WolinetIDE License' })).toBeVisible();
   await expect(settings).not.toContainText('License & updates');
   await about.getByRole('button', { name: 'Releases', exact: true }).click();
   await expect.poll(() => page.evaluate(() => (window as any).__supportFixture.opened)).toEqual([
-    ['https://github.com/wolinet-renatus/pandacode/releases', '_blank', 'noopener,noreferrer'],
+    ['https://github.com/wolinet-renatus/WolinetIDE/releases', '_blank', 'noopener,noreferrer'],
   ]);
 });

@@ -1,8 +1,8 @@
 [package]
 name = "pandacode"
 version = "0.3.31"
-description = "A lightweight native workspace for coding agents"
-authors = ["PandaCode contributors"]
+description = "A lightweight native workspace for coding agents — managed by Wolinet Technology"
+authors = ["Wolinet Technology"]
 edition = "2021"
 
 [lib]

@@ -4,8 +4,8 @@ PandaCode has an official tap,
 [wolinet-renatus/homebrew-pandacode](https://github.com/wolinet-renatus/homebrew-pandacode).
 
 ```sh
-brew install --cask wolinet-renatus/pandacode/pandacode   # macOS 12+, Apple silicon or Intel
-brew install wolinet-renatus/pandacode/pandacode          # Linux x86_64 or aarch64
+brew install --cask wolinet-renatus/wolinetide/wolinetide   # macOS 12+, Apple silicon or Intel
+brew install wolinet-renatus/wolinetide/wolinetide          # Linux x86_64 or aarch64
 ```
 
 ## What it installs
@@ -30,7 +30,7 @@ The tap updates itself, so releasing PandaCode needs no change here and no secre
 this repository. Its `.github/workflows/update.yml` runs every 3 hours, on demand
 (`workflow_dispatch`) and on a `pandacode-release` repository dispatch. It:
 
-1. reads the latest release tag of `wolinet-renatus/pandacode` with `gh api` and stops
+1. reads the latest release tag of `wolinet-renatus/WolinetIDE` with `gh api` and stops
    unless it matches `^v\d+\.\d+\.\d+$`;
 2. downloads the four macOS and Linux `.sha256` files from that release and checks
    that each holds a 64-character hex digest;

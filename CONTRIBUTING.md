@@ -10,6 +10,10 @@ By participating you agree to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 Report security issues privately as described in [SECURITY.md](SECURITY.md),
 not in public issues.
 
+## Project Governance
+
+WolinetIDE is actively maintained and governed exclusively by **Wolinet Technology**. All roadmap decisions, release schedules, bug fixes, updates, and patches are decided by Wolinet Technology.
+
 ## Prerequisites
 
 - **Node.js 22** and npm.

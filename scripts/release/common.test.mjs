@@ -44,14 +44,14 @@ test('the Cargo.lock version is set with either line ending', () => {
 
 test('the updater manifest points every signed platform at its release asset', async () => {
   const { updaterManifest } = await import('./common.mjs');
-  const manifest = updaterManifest('0.3.1', ' Notes \n', { 'darwin-aarch64': 'sig-mac\n', 'darwin-x86_64': 'sig-intel', 'linux-x86_64': 'sig-linux', 'linux-aarch64': 'sig-arm' }, '2026-10-18T00:00:00Z', 'wolinet-renatus/pandacode');
+  const manifest = updaterManifest('0.3.1', ' Notes \n', { 'darwin-aarch64': 'sig-mac\n', 'darwin-x86_64': 'sig-intel', 'linux-x86_64': 'sig-linux', 'linux-aarch64': 'sig-arm' }, '2026-10-18T00:00:00Z', 'wolinet-renatus/WolinetIDE');
   assert.deepEqual(manifest, {
     version: '0.3.1', notes: 'Notes', pub_date: '2026-10-18T00:00:00Z',
     platforms: {
-      'darwin-aarch64': { signature: 'sig-mac', url: 'https://github.com/wolinet-renatus/pandacode/releases/download/v0.3.1/WolinetIDE-macOS-arm64.app.tar.gz' },
-      'darwin-x86_64': { signature: 'sig-intel', url: 'https://github.com/wolinet-renatus/pandacode/releases/download/v0.3.1/WolinetIDE-macOS-x64.app.tar.gz' },
-      'linux-x86_64': { signature: 'sig-linux', url: 'https://github.com/wolinet-renatus/pandacode/releases/download/v0.3.1/WolinetIDE-Linux-x86_64.AppImage' },
-      'linux-aarch64': { signature: 'sig-arm', url: 'https://github.com/wolinet-renatus/pandacode/releases/download/v0.3.1/WolinetIDE-Linux-aarch64.AppImage' },
+      'darwin-aarch64': { signature: 'sig-mac', url: 'https://github.com/wolinet-renatus/WolinetIDE/releases/download/v0.3.1/WolinetIDE-macOS-arm64.app.tar.gz' },
+      'darwin-x86_64': { signature: 'sig-intel', url: 'https://github.com/wolinet-renatus/WolinetIDE/releases/download/v0.3.1/WolinetIDE-macOS-x64.app.tar.gz' },
+      'linux-x86_64': { signature: 'sig-linux', url: 'https://github.com/wolinet-renatus/WolinetIDE/releases/download/v0.3.1/WolinetIDE-Linux-x86_64.AppImage' },
+      'linux-aarch64': { signature: 'sig-arm', url: 'https://github.com/wolinet-renatus/WolinetIDE/releases/download/v0.3.1/WolinetIDE-Linux-aarch64.AppImage' },
     },
   });
   assert.throws(() => updaterManifest('0.3.1', '', {}), /No signed updater files/);

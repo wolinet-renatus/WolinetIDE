@@ -6,6 +6,7 @@ import { project } from '../lib/distribution';
 const sections = [
   ['summary', 'In plain words'],
   ['text', 'The PandaCode License'],
+  ['governance', 'Project Governance'],
   ['agents', 'Your agents, your permissions'],
   ['contribute', 'Contributing'],
 ] as const;
@@ -30,7 +31,7 @@ const sections = [
         <ul>
           <li>You may <strong>use, copy, modify, merge, publish, distribute, sublicense and sell</strong> copies of PandaCode.</li>
           <li>Include the copyright notice and the license text in all copies or substantial portions of the software.</li>
-          <li>If you <strong>release a fork publicly or use one commercially</strong>, state “This is a fork of PandaCode” with a link to <a href={project.repo} target="_blank" rel="noopener noreferrer">github.com/aicodeking/pandacode</a>, in its README or main docs and somewhere its users can see, like an About screen, website or store listing.</li>
+          <li>If you <strong>release a fork publicly or use one commercially</strong>, state “This is a fork of PandaCode” with a link to upstream (github.com/aicodeking/pandacode), in its README or main docs and somewhere its users can see, like an About screen, website or store listing.</li>
           <li>Simply using PandaCode, at home or at work, needs no credit.</li>
           <li>PandaCode is provided <strong>“as is”, without warranty of any kind</strong>. The authors aren’t liable for any claim, damages or other liability arising from it.</li>
         </ul>
@@ -49,6 +50,12 @@ const sections = [
         </div>
       </section>
 
+      <section id="governance" aria-labelledby="governance-title">
+        <h2 id="governance-title">Project Governance & Management</h2>
+        <p><strong>WolinetIDE is actively managed, developed, and maintained by Wolinet Technology.</strong></p>
+        <p>From this moment forward, all software updates, bug fixes, enhancements, roadmap decisions, and security patches are decided and published exclusively by Wolinet Technology. WolinetIDE is an independent project originally based on PandaCode and licensed under the MIT license.</p>
+      </section>
+
       <section id="agents" aria-labelledby="agents-title">
         <h2 id="agents-title">Your agents, your permissions</h2>
         <p>PandaCode runs coding agents, bots, virtual machines, cloud sandboxes and deploys on your behalf. They act with the permissions you grant: they can read and change files, run commands, spend money with your providers and send data to other services as part of a task.</p>
@@ -57,7 +64,7 @@ const sections = [
 
       <section id="contribute" aria-labelledby="contribute-title">
         <h2 id="contribute-title">Contributing</h2>
-        <p>The source lives at <a href={project.repo} target="_blank" rel="noopener noreferrer">github.com/wolinet-renatus/pandacode</a>. Bugs, ideas and pull requests are welcome in <a href={project.issues} target="_blank" rel="noopener noreferrer">GitHub issues</a>. Unless you say otherwise, contributions you submit are licensed under the same PandaCode License.</p>
+        <p>The source lives at <a href={project.repo} target="_blank" rel="noopener noreferrer">github.com/wolinet-renatus/WolinetIDE</a>. Bugs, ideas and pull requests are welcome in <a href={project.issues} target="_blank" rel="noopener noreferrer">GitHub issues</a>. Unless you say otherwise, contributions you submit are licensed under the same PandaCode License.</p>
         <p>See also the <a href="/privacy/">Privacy Policy</a>.</p>
       </section>
     </article>

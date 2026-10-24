@@ -1,6 +1,6 @@
 # Design canvas
 
-First version of [issue #14](https://github.com/wolinet-renatus/pandacode/issues/14): agents design UI as HTML artboards, the user reviews them beside the chat and comments on exact elements, and the agent revises.
+First version of [issue #14](https://github.com/wolinet-renatus/WolinetIDE/issues/14): agents design UI as HTML artboards, the user reviews them beside the chat and comments on exact elements, and the agent revises.
 
 - **Artboards** are files in the task checkout: `.pandacode/design/<name>.html` (letters, digits, `.`, `_`, `-`; up to 64 characters). Turn changes, diffs, review and worktree merges cover them like any other file. `<meta name="artboard-width" content="390">` sets an artboard's width (default 1280); its height fits the content (up to 6000 px).
 - **Comments** are `.pandacode/design/comments.json`: `[{ id, artboard, selector, bbox: {x, y, width, height}, text, status: "open" | "resolved", createdAt, note? }]`. `selector` is a CSS path from `body` (ids when unique, else `:nth-of-type`); `bbox` is in artboard pixels.

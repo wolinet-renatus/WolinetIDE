@@ -2,7 +2,7 @@ import { test as base, expect, type Page, type TestInfo } from '@playwright/test
 import { mkdir, writeFile } from 'node:fs/promises';
 
 const screenshots = '/private/tmp/pandacode-landing-checks';
-const repo = 'https://github.com/wolinet-renatus/pandacode';
+const repo = 'https://github.com/wolinet-renatus/WolinetIDE';
 const releases = `${repo}/releases/latest`;
 const issues = `${repo}/issues`;
 const test = base.extend<{ browserHealth: void }>({
@@ -44,7 +44,7 @@ async function selectScene(page: Page, scene: string) {
 
 test('hero, supported harnesses, and complete page have valid resources and responsive layout', async ({ page }, info) => {
   await page.goto('/');
-  await expect(page).toHaveTitle('PandaCode — A calmer place to build.');
+  await expect(page).toHaveTitle('WolinetIDE — A calmer place to build.');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Great work.A calmer place.');
   await expect(page.locator('.hero-landscape img')).toBeVisible();
   await expect(page.locator('.hero-description')).toHaveText('Your favorite coding agents.One thoughtfully quiet workspace.');
@@ -112,7 +112,7 @@ async function expectPrivacyDetails(page: Page) {
   await expect(privacy.getByRole('heading', {name: 'Your work. Your business.'})).toBeVisible();
   await expect(privacy).toContainText(/local|on your Mac/i);
   await expect(privacy).toContainText(/provider|third.party/i);
-  await expect(privacy.locator('.privacy-intro')).toContainText('PandaCode collects nothing.');
+  await expect(privacy.locator('.privacy-intro')).toContainText('WolinetIDE collects nothing.');
   await expect(privacy.locator('.privacy-intro')).toContainText('no telemetry, no analytics');
   await expect(privacy).not.toContainText(/Cloudflare Web Analytics|Featurebase|Stripe|license key/i);
   await expect(privacy.getByRole('link', {name: 'GitHub issues'})).toHaveAttribute('href', issues);
@@ -144,11 +144,11 @@ async function expectComparison(page: Page) {
   await expect(table).toBeVisible();
   const headers = table.getByRole('columnheader');
   await expect(headers).toHaveCount(5);
-  for (const [index, name] of ['Feature', 'PandaCode', 'T3 Code', 'Conductor', 'Herdr'].entries()) {
+  for (const [index, name] of ['Feature', 'WolinetIDE', 'T3 Code', 'Conductor', 'Herdr'].entries()) {
     await expect(headers.nth(index)).toContainText(name);
     await expect(headers.nth(index)).toHaveAttribute('scope', 'col');
   }
-  await expect(table).toHaveAccessibleName(/PandaCode.*T3 Code.*Conductor.*Herdr/);
+  await expect(table).toHaveAccessibleName(/WolinetIDE.*T3 Code.*Conductor.*Herdr/);
   expect(await table.locator('tbody tr').count()).toBeGreaterThan(1);
   await expect(table.getByRole('row', {name: /Price & license/})).toContainText('Open source · MIT-based · No account');
   await expect(table).not.toContainText('$20');
@@ -188,13 +188,13 @@ test('download and source links go to GitHub, open safely, and fetch nothing unt
   });
   await page.goto('/');
   const hero = page.locator('.hero-actions');
-  await expect(hero.getByRole('link', {name: /Download PandaCode/})).toHaveAttribute('href', releases);
+  await expect(hero.getByRole('link', {name: /Download WolinetIDE/})).toHaveAttribute('href', releases);
   await expect(hero.getByRole('link', {name: /Star on GitHub/})).toHaveAttribute('href', repo);
-  await expect(page.locator('.download-content').getByRole('link', {name: /Download PandaCode/})).toHaveAttribute('href', releases);
+  await expect(page.locator('.download-content').getByRole('link', {name: /Download WolinetIDE/})).toHaveAttribute('href', releases);
   await expect(page.locator('.download-content').getByRole('link', {name: /View the source on GitHub/})).toHaveAttribute('href', repo);
   const direct = page.locator('[data-platform-download]');
   await expect(direct).toHaveCount(3);
-  for (const [index, file] of ['PandaCode-macOS-arm64.dmg', 'PandaCode-Windows-x64-setup.exe', 'PandaCode-Linux-x86_64.AppImage'].entries()) {
+  for (const [index, file] of ['WolinetIDE-macOS-arm64.dmg', 'WolinetIDE-Windows-x64-setup.exe', 'WolinetIDE-Linux-x86_64.AppImage'].entries()) {
     await expect(direct.nth(index)).toHaveAttribute('href', `${repo}/releases/latest/download/${file}`);
   }
   for (const link of await page.locator('a[href^="https://github.com/"]:not([data-platform-download])').all()) {
@@ -206,7 +206,7 @@ test('download and source links go to GitHub, open safely, and fetch nothing unt
   await expect(page.locator('body')).not.toContainText(/\$20|Stripe|Opening checkout|Cancel anytime|two devices|PandaCode Pro/i);
   expect(githubRequests).toEqual([]);
   const opened = context.waitForEvent('page');
-  await hero.getByRole('link', {name: /Download PandaCode/}).click();
+  await hero.getByRole('link', {name: /Download WolinetIDE/}).click();
   const tab = await opened;
   await expect(tab).toHaveURL(releases);
   expect(await tab.evaluate(() => window.opener)).toBeNull();
@@ -225,7 +225,7 @@ test('the open-source section explains the license, privacy and building from so
   await expect(section.getByRole('heading', { level: 2 })).toHaveText('Free to use.Open to everyone.');
   for (const fact of ['MIT-based license.', 'No account.', 'No telemetry.', 'Bring your own agents.', 'Built in the open.']) await expect(section).toContainText(fact);
   const build = section.locator('pre');
-  for (const command of [`git clone ${repo}.git`, 'cd pandacode', 'npm ci', 'npm run desktop']) await expect(build).toContainText(command);
+  for (const command of [`git clone ${repo}.git`, 'cd WolinetIDE', 'npm ci', 'npm run desktop']) await expect(build).toContainText(command);
   await expect(section.getByRole('link', { name: /Star on GitHub/ })).toHaveAttribute('href', repo);
   await expect(section.getByRole('link', { name: /Contribute/ })).toHaveAttribute('href', issues);
   await expect(section.getByRole('link', { name: /Read the license/ })).toHaveAttribute('href', '/license/');
@@ -405,7 +405,7 @@ test('server-rendered hero and feature copy remain visible without JavaScript', 
     await expect(page.locator(heading)).toBeVisible();
     await expect(page.locator(heading)).toHaveCSS('opacity', '1');
   }
-  await expect(page.locator('.download-content .button')).toContainText('Download PandaCode');
+  await expect(page.locator('.download-content .button')).toContainText('Download WolinetIDE');
   await expect(page.locator('.download-content .button')).toHaveAttribute('href', releases);
   await expect(page.locator('#open-source pre')).toContainText('npm run desktop');
   await expect(page.locator('#download-distribution')).toBeVisible();

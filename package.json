@@ -2,7 +2,8 @@
   "name": "wolinet-ide",
   "private": true,
   "version": "0.3.31",
-  "description": "Open-source desktop workspace for coding agents — powered by Wolinet AI.",
+  "description": "Open-source desktop workspace for coding agents — managed and developed by Wolinet Technology.",
+  "author": "Wolinet Technology",
   "license": "SEE LICENSE IN LICENSE",
   "homepage": "https://github.com/wolinet-renatus/WolinetIDE#readme",
   "repository": {
