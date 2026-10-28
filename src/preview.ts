@@ -116,6 +116,7 @@ const providers: Provider[] = [
     models: [
       { id: 'wolinet-pro', name: 'Wolinet Pro', description: 'Flagship autonomous reasoning model.' },
       { id: 'wolinet-coder', name: 'Wolinet Coder', description: 'Lightning-fast precision coding model.' },
+      { id: 'wolinet-flash', name: 'Wolinet Flash', description: 'Ultra-fast lightweight model.' },
     ],
   },
 ];
@@ -152,54 +153,23 @@ const catalogs: Record<ProviderId, ProviderModel[]> = {
   wolinet: [
     { id: 'wolinet-pro', name: 'Wolinet Pro', description: 'Flagship autonomous reasoning model.' },
     { id: 'wolinet-coder', name: 'Wolinet Coder', description: 'Lightning-fast precision coding model.' },
+    { id: 'wolinet-flash', name: 'Wolinet Flash', description: 'Ultra-fast lightweight model.' },
   ],
-  pi: [{ id: 'anthropic/claude-sonnet-4-5', name: 'Claude Sonnet 4.5', description: 'Sample Pi model.', reasoningEfforts: [{ id: 'low', name: 'Low', description: '' }, { id: 'high', name: 'High', description: '' }], contextWindow: 200000 }],
-  omp: [{ id: 'anthropic/claude-sonnet-4-5', name: 'Claude Sonnet 4.5', description: 'Sample omp model.', reasoningEfforts: [{ id: 'low', name: 'Low', description: '' }, { id: 'high', name: 'High', description: '' }], contextWindow: 200000 }],
-  deepseek: [
-    { id: 'deepseek-v4-flash', name: 'DeepSeek V4 Flash', description: 'Fast, low-cost default.', reasoningEfforts: [{ id: 'off', name: 'Off', description: 'No extended reasoning.' }, { id: 'low', name: 'Low', description: 'Light reasoning.' }, { id: 'high', name: 'High', description: 'Thorough reasoning. Recommended.' }, { id: 'max', name: 'Max', description: 'Maximum reasoning for the hardest tasks.' }], defaultReasoningEffort: 'high', contextWindow: 1000000 },
-    { id: 'deepseek-v4-pro', name: 'DeepSeek V4 Pro', description: 'Strongest DeepSeek model.', reasoningEfforts: [{ id: 'off', name: 'Off', description: 'No extended reasoning.' }, { id: 'low', name: 'Low', description: 'Light reasoning.' }, { id: 'high', name: 'High', description: 'Thorough reasoning. Recommended.' }, { id: 'max', name: 'Max', description: 'Maximum reasoning for the hardest tasks.' }], defaultReasoningEffort: 'high', contextWindow: 1000000 },
-    { id: 'deepseek-v41-flash', name: 'DeepSeek V41 Flash', description: 'Updated Flash model.', reasoningEfforts: [{ id: 'off', name: 'Off', description: 'No extended reasoning.' }, { id: 'low', name: 'Low', description: 'Light reasoning.' }, { id: 'high', name: 'High', description: 'Thorough reasoning. Recommended.' }, { id: 'max', name: 'Max', description: 'Maximum reasoning for the hardest tasks.' }], defaultReasoningEffort: 'high', contextWindow: 1000000 },
-    { id: 'deepseek-v4-flash-vision-exp', name: 'DeepSeek V4 Flash Vision Exp', description: 'Experimental image input.', reasoningEfforts: [{ id: 'off', name: 'Off', description: 'No extended reasoning.' }, { id: 'low', name: 'Low', description: 'Light reasoning.' }, { id: 'high', name: 'High', description: 'Thorough reasoning. Recommended.' }, { id: 'max', name: 'Max', description: 'Maximum reasoning for the hardest tasks.' }], defaultReasoningEffort: 'high', contextWindow: 1000000 },
-  ],
-  commandcode: [
-    { id: 'deepseek/deepseek-v4.1-flash', name: 'DeepSeek V4.1 Flash', description: 'fast hybrid-attention reasoning', reasoningEfforts: [{ id: 'off', name: 'Off', description: '' }, { id: 'low', name: 'Low', description: '' }, { id: 'high', name: 'High', description: '' }, { id: 'max', name: 'Max', description: '' }], defaultReasoningEffort: 'max' },
-    { id: 'claude-sonnet-5-5', name: 'Claude Sonnet 5.5', description: 'best combo of speed & intelligence (recommended)' },
-    { id: 'gpt-6-luna', name: 'GPT-6 Luna', description: 'most efficient OpenAI model for focused, high-volume tasks' },
-    { id: 'moonshotai/Kimi-K3', name: 'Kimi K3', description: 'long-horizon coding & knowledge work with 1M context' },
-  ],
-  // Recorded from `cline --acp` 3.0.73; efforts are its --thinking levels.
-  cline: ['anthropic/claude-sonnet-5.5', 'anthropic/claude-opus-5.5', 'openai/gpt-6-sol'].map((id, index) => ({ id, name: ['Claude Sonnet 5.5', 'Claude Opus 5.5', 'GPT-6 Sol'][index], description: '', reasoningEfforts: ['none', 'low', 'medium', 'high', 'xhigh'].map(effort => ({ id: effort, name: effort === 'xhigh' ? 'Extra high' : effort[0].toUpperCase() + effort.slice(1), description: '' })) })),
-  'github-copilot': [{ id: 'default', name: 'Default', description: 'Use the model configured in GitHub Copilot CLI.' }],
-  muse: ['muse-wonder-1.0', 'muse-spark-1.3'].map(id => ({ id, name: id, description: '', reasoningEfforts: ['minimal', 'low', 'medium', 'high', 'xhigh', 'max'].map(effort => ({ id: effort, name: effort === 'xhigh' ? 'Extra high' : effort[0].toUpperCase() + effort.slice(1), description: '' })), defaultReasoningEffort: 'high', contextWindow: 1007997 })),
-  opencode: openCodePreviewModels,
-  glm: [
-    { id: 'glm-5.3', name: 'GLM-5.3', description: 'Current flagship. Availability depends on your plan.' },
-    { id: 'glm-5.3-flash', name: 'GLM-5.3-Flash', description: 'Fast, low-cost tier. Availability depends on your plan.' },
-    { id: 'glm-5.3[1m]', name: 'GLM-5.3 · 1M context', description: 'Flagship with the extended 1M-token context window. Availability depends on your plan.' },
-    { id: 'glm-5.3-flash[1m]', name: 'GLM-5.3-Flash · 1M context', description: 'Fast tier with the extended 1M-token context window. Availability depends on your plan.' },
-    { id: 'glm-5-turbo', name: 'GLM-5-Turbo', description: 'Fast general-purpose model. Availability depends on your plan.' },
-  ],
-  mimo: [
-    { id: 'mimo-v2.6-pro', name: 'MiMo-V2.6-Pro', description: 'Flagship. Token Plan and pay-as-you-go. Availability depends on your plan.' },
-    { id: 'mimo-v2.6-pro[1m]', name: 'MiMo-V2.6-Pro · 1M context', description: 'Flagship with the extended 1M-token context window. Availability depends on your plan.' },
-    { id: 'mimo-v2.6-flash', name: 'MiMo-V2.6-Flash', description: 'Fast and a third of Pro\'s credit cost. Availability depends on your plan.' },
-  ],
-  antigravity: [{ id: 'default', name: 'Server default', description: 'Connect the Antigravity ACP server to load models.' }],
-  claude: [
-    { id: 'sonnet', name: 'Claude Sonnet 5', description: 'Sample Claude Code model metadata.', reasoningEfforts: ['low', 'medium', 'high'].map(id => ({ id, name: id[0].toUpperCase() + id.slice(1), description: `Sample ${id} effort.` })), defaultReasoningEffort: 'medium', contextWindow: 200000 },
-    { id: 'opus', name: 'Claude Opus 5', description: 'Sample Claude Code model metadata.', reasoningEfforts: ['low', 'medium', 'high', 'max'].map(id => ({ id, name: id[0].toUpperCase() + id.slice(1), description: `Sample ${id} effort.` })), contextWindow: 1000000 },
-    { id: 'haiku', name: 'Claude Haiku 4.5', description: 'Sample Claude Code model metadata.', contextWindow: 200000 },
-  ],
-  codex: [
-    { id: 'gpt-6-astra', name: 'GPT-6-Astra', description: 'Sample Codex model metadata.', reasoningEfforts: ['low', 'medium', 'high', 'xhigh'].map(id => ({ id, name: id === 'xhigh' ? 'Extra high' : id[0].toUpperCase() + id.slice(1), description: `Sample ${id} effort.` })), defaultReasoningEffort: 'medium', contextWindow: 400000 },
-    { id: 'gpt-5.6-sol', name: 'GPT-5.6-Sol', description: 'Sample Codex model metadata.', reasoningEfforts: ['low', 'medium', 'high'].map(id => ({ id, name: id[0].toUpperCase() + id.slice(1), description: `Sample ${id} effort.` })) },
-  ],
-  kimi: [{ id: 'kimi-code/k3', name: 'K3', description: 'Sample configured Kimi model.', reasoningEfforts: [{ id: 'on', name: 'On', description: 'Enable thinking.' }, { id: 'off', name: 'Off', description: 'Disable thinking.' }], contextWindow: 256000 }],
-  // Mirrors the initialize modelState that `grok agent stdio` advertises.
-  grok: [
-    { id: 'grok-4.7', name: 'Grok 4.7', description: 'Frontier model for agentic coding.', reasoningEfforts: [{ id: 'low', name: 'Low', description: 'Fastest responses. Best for simple tasks.' }, { id: 'medium', name: 'Medium', description: 'Strong quality with a faster turnaround.' }, { id: 'high', name: 'High', description: 'Thorough reasoning and quality. Recommended.' }, { id: 'xhigh', name: 'Extra High', description: 'Maximum reasoning for the hardest tasks.' }], defaultReasoningEffort: 'high', contextWindow: 500000 },
-    { id: 'grok-4.7-build-fast', name: 'Grok 4.7 Fast', description: 'Fast variant. 2x the price.', reasoningEfforts: [{ id: 'low', name: 'Low', description: 'Fastest responses.' }, { id: 'high', name: 'High', description: 'Thorough reasoning and quality.' }], defaultReasoningEffort: 'high', contextWindow: 500000 },
-  ],
+  pi: [],
+  omp: [],
+  deepseek: [],
+  commandcode: [],
+  cline: [],
+  'github-copilot': [],
+  muse: [],
+  opencode: [],
+  glm: [],
+  mimo: [],
+  antigravity: [],
+  claude: [],
+  codex: [],
+  kimi: [],
+  grok: [],
 };
 let git: GitStatus = { branch: 'feat/instant-search', isRepo: true, files: [{ path: 'src/components/search.ts', index: ' ', working: 'M' }, { path: 'src/lib/search-index.ts', index: '?', working: '?' }, { path: 'src/components/search.test.ts', index: ' ', working: 'M' }] };
 const worktreeGit = new Map<string, GitStatus>();
@@ -488,9 +458,13 @@ function runPreviewGoal(task: Session): void {
   };
   timers.set(task.id, window.setTimeout(tick, 150));
 }
-/** Sample estimated API cost for the Agent usage window: a year of Claude Code and Codex days at 14:00 local. */
-const sampleModels = [{ provider: 'claude', name: 'claude-opus-5-5', priced: true }, { provider: 'codex', name: 'gpt-6-astra', priced: true }, { provider: 'codex', name: 'codex-auto-review', priced: false }] as const;
-const i2p = (model: number) => sampleModels[model]?.provider ?? 'claude';
+/** Sample estimated API cost for the Agent usage window: a year of Wolinet AI days at 14:00 local. */
+const sampleModels = [
+  { provider: 'wolinet', name: 'wolinet-pro', priced: true },
+  { provider: 'wolinet', name: 'wolinet-coder', priced: true },
+  { provider: 'wolinet', name: 'wolinet-flash', priced: false },
+] as const;
+const i2p = (model: number) => sampleModels[model]?.provider ?? 'wolinet';
 function sampleUsageLedger() {
   const today = new Date(); let seed = 11;
   const random = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
@@ -510,7 +484,7 @@ function sampleUsageLedger() {
       if (index < 2) sessions.push({ provider: model.provider, first: hour, last: hour });
     });
   }
-  return { scannedAt: Date.now(), pricing: { source: 'bundled', fetchedAt: null }, sources: [{ provider: 'claude', files: 40 }, { provider: 'codex', files: 180 }], models: sampleModels, rows, sessions };
+  return { scannedAt: Date.now(), pricing: { source: 'bundled', fetchedAt: null }, sources: [{ provider: 'wolinet', files: 220 }], models: sampleModels, rows, sessions };
 }
 /** A deterministic year of sample activity: quieter weekends, occasional gaps, today at 3,420 tokens. */
 function sampleDailyTokens(): { date: string; tokens: number }[] {
@@ -527,18 +501,15 @@ function sampleDailyTokens(): { date: string; tokens: number }[] {
 /** Preview queues persist in localStorage so a reload behaves like a restart. */
 type PreviewQueued = { id: string; sessionId: string; position: number; text: string; attachments: unknown[]; createdAt: number; updatedAt: number };
 function previewQueue(): PreviewQueued[] {
-  try { return (JSON.parse(localStorage.getItem('pandacode.preview.queue') ?? '[]') as PreviewQueued[]).filter(e => sessions.some(task => task.id === e.sessionId)).sort((a, b) => a.sessionId.localeCompare(b.sessionId) || a.position - b.position); } catch { return []; }
+  try { return (JSON.parse(localStorage.getItem('wolinetide.preview.queue') ?? localStorage.getItem('pandacode.preview.queue') ?? '[]') as PreviewQueued[]).filter(e => sessions.some(task => task.id === e.sessionId)).sort((a, b) => a.sessionId.localeCompare(b.sessionId) || a.position - b.position); } catch { return []; }
 }
-function savePreviewQueue(queue: PreviewQueued[]): void { try { localStorage.setItem('pandacode.preview.queue', JSON.stringify(queue)); } catch { /* preview only */ } }
-/** Sample conversations from the Claude Code and Codex CLIs for the Import conversations window. */
-const previewImportables: Record<'claude' | 'codex', { id: string; title: string; folder: string; updatedAt: number; messages: number | null; model: string | null }[]> = {
-  claude: [
-    { id: '7d3f2c1a-0b4e-4c6d-9a8b-1f2e3d4c5b6a', title: 'Fix login redirect loop', folder: '/Users/you/Projects/orbit', updatedAt: now - 3 * 3600000, messages: 24, model: 'claude-opus-5-5' },
-    { id: '1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d', title: 'Draft the pricing page copy', folder: '/Users/you/Projects/marketing-site', updatedAt: now - 2 * 86400000, messages: 12, model: 'claude-sonnet-5' },
-    { id: '9f8e7d6c-5b4a-4938-8271-6a5b4c3d2e1f', title: 'Old scratch experiment', folder: '/missing/scratch', updatedAt: now - 40 * 86400000, messages: 3, model: null },
-  ],
-  codex: [
-    { id: '4c5d6e7f-8a9b-4c0d-9e1f-2a3b4c5d6e7f', title: 'Speed up the search index', folder: '/Users/you/Projects/wolinet', updatedAt: now - 5 * 3600000, messages: null, model: 'gpt-6-astra' },
+function savePreviewQueue(queue: PreviewQueued[]): void { try { localStorage.setItem('wolinetide.preview.queue', JSON.stringify(queue)); } catch { /* preview only */ } }
+/** Sample conversations for the Import conversations window. */
+const previewImportables: Record<string, { id: string; title: string; folder: string; updatedAt: number; messages: number | null; model: string | null }[]> = {
+  wolinet: [
+    { id: '7d3f2c1a-0b4e-4c6d-9a8b-1f2e3d4c5b6a', title: 'Fix login redirect loop', folder: '/Users/you/Projects/orbit', updatedAt: now - 3 * 3600000, messages: 24, model: 'wolinet-pro' },
+    { id: '1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d', title: 'Draft the pricing page copy', folder: '/Users/you/Projects/marketing-site', updatedAt: now - 2 * 86400000, messages: 12, model: 'wolinet-coder' },
+    { id: '4c5d6e7f-8a9b-4c0d-9e1f-2a3b4c5d6e7f', title: 'Speed up the search index', folder: '/Users/you/Projects/wolinet', updatedAt: now - 5 * 3600000, messages: null, model: 'wolinet-pro' },
   ],
 };
 /** Mirrors native storage: a New task draft is published by its first saved prompt. */
@@ -730,13 +701,13 @@ export async function invoke<T>(command: string, args: Record<string, any>): Pro
     case 'prompt_activity': result = sampleUsageLedger().rows.filter((_, i) => i % 3 === 0).map(row => [row[0], i2p(row[1]), 1 + (row[0] % 7)]); break;
     case 'agent_usage': {
       const provider = String(args.provider);
-      const supported = ['claude', 'codex', 'kimi', 'glm', 'opencode'].includes(provider);
+      const supported = ['wolinet', 'claude', 'codex', 'kimi', 'glm', 'opencode'].includes(provider);
       result = { provider, status: supported ? 'ready' : 'unsupported', checkedAt: Date.now(), stale: false,
-        plan: provider === 'codex' ? 'Pro' : provider === 'opencode' ? 'Go' : null,
+        plan: provider === 'wolinet' ? 'Pro' : provider === 'codex' ? 'Pro' : provider === 'opencode' ? 'Go' : null,
         windows: supported ? [
-          { label: provider === 'opencode' ? 'Go rolling window' : '5-hour window', usedPercent: provider === 'codex' ? 38 : 22, resetsAt: new Date(Date.now() + 7200000).toISOString() },
-          { label: provider === 'opencode' ? 'Go weekly' : 'Weekly', usedPercent: 64, resetsAt: new Date(Date.now() + 3 * 86400000).toISOString() },
-        ] : [], source: 'Sample limits for the browser preview. No provider request was made.',
+          { label: provider === 'opencode' ? 'Go rolling window' : '5-hour window', usedPercent: provider === 'wolinet' ? 18 : provider === 'codex' ? 38 : 22, resetsAt: new Date(Date.now() + 7200000).toISOString() },
+          { label: provider === 'opencode' ? 'Go weekly' : 'Weekly', usedPercent: provider === 'wolinet' ? 42 : 64, resetsAt: new Date(Date.now() + 3 * 86400000).toISOString() },
+        ] : [], source: 'Sample limits for the browser preview. No external provider request was made.',
         message: supported ? null : 'This harness does not expose account limits. Check its account dashboard.' };
       break;
     }
@@ -913,17 +884,17 @@ export async function invoke<T>(command: string, args: Record<string, any>): Pro
     }
     case 'list_importable_conversations': {
       const query = String(args.search ?? '').toLowerCase();
-      const source = args.provider === 'codex' ? 'codex' : 'claude';
+      const source = (args.provider in previewImportables ? args.provider : 'wolinet') as string;
       const imported = (id: string) => sessions.find(task => task.provider === source && task.resumeId === id)?.id ?? null;
-      const items = previewImportables[source].filter(item => !query || `${item.title} ${item.folder}`.toLowerCase().includes(query))
+      const items = (previewImportables[source] ?? previewImportables.wolinet ?? []).filter(item => !query || `${item.title} ${item.folder}`.toLowerCase().includes(query))
         .map(item => ({ ...item, importedTaskId: imported(item.id), unavailable: item.folder.startsWith('/missing') ? 'Its folder no longer exists on this computer.' : null }));
-      result = { items, cursor: null, note: items.length ? null : `No ${source === 'codex' ? 'Codex' : 'Claude Code'} conversations were found on this computer.` }; break;
+      result = { items, cursor: null, note: items.length ? null : `No conversations were found on this computer.` }; break;
     }
     case 'import_conversations': {
-      const source = args.provider === 'codex' ? 'codex' : 'claude';
+      const source = (args.provider in previewImportables ? args.provider : 'wolinet') as string;
       const imported: Session[] = [], existing: string[] = [], failed: { id: string; message: string }[] = [];
       for (const conversationId of args.ids as string[]) {
-        const found = previewImportables[source].find(item => item.id === conversationId);
+        const found = (previewImportables[source] ?? previewImportables.wolinet ?? []).find(item => item.id === conversationId);
         const already = sessions.find(task => task.provider === source && task.resumeId === conversationId);
         if (already) { existing.push(already.id); continue; }
         if (!found || found.folder.startsWith('/missing')) { failed.push({ id: conversationId, message: 'Its folder no longer exists on this computer.' }); continue; }

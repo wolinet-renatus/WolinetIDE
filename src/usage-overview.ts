@@ -9,7 +9,7 @@ export interface AgentLimit { provider: ProviderId; name: string; peak: number |
 export type CostState = { kind: 'pending' } | { kind: 'error'; message: string } | { kind: 'ready'; summary: Summary; tracked: ProviderId[]; pricing: string };
 
 const percent = new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 });
-const TRACKED_LOGS = 'Claude Code and Codex';
+const TRACKED_LOGS = 'Wolinet AI';
 
 export function tone(value: number): 'exhausted' | 'high' | 'normal' { return value >= 95 ? 'exhausted' : value >= 80 ? 'high' : 'normal'; }
 

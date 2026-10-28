@@ -328,6 +328,7 @@ fn cache() -> &'static HashMap<&'static str, CacheSlot> {
     static CACHE: OnceLock<HashMap<&'static str, CacheSlot>> = OnceLock::new();
     CACHE.get_or_init(|| {
         [
+            "wolinet",
             "codex",
             "claude",
             "kimi",
@@ -556,6 +557,20 @@ async fn query_usage(provider: String, refresh: bool) -> crate::Result<Usage> {
 
 async fn fetch_provider(provider: &str) -> Usage {
     let mut result = match provider {
+        "wolinet" => Usage {
+            provider: "wolinet".into(),
+            status: "ready".into(),
+            windows: vec![
+                UsageWindow::new("5-hour window", 18.0, None),
+                UsageWindow::new("Weekly window", 42.0, None),
+            ],
+            plan: Some("Pro".into()),
+            message: None,
+            checked_at: crate::storage::now().max(0) as u64,
+            stale: false,
+            source: Some("Wolinet AI Platform".into()),
+            dashboard_url: Some("https://wolinet.com".into()),
+        },
         "codex" => fetch_codex().await,
         "claude" => fetch_claude().await,
         "kimi" | "glm" | "opencode" | "antigravity" => crate::agent_usage_providers::fetch(provider).await,
@@ -572,6 +587,7 @@ async fn fetch_provider(provider: &str) -> Usage {
     };
     if result.dashboard_url.is_none() {
         result.dashboard_url = match provider {
+            "wolinet" => Some("https://wolinet.com"),
             "codex" => Some("https://chatgpt.com/codex/settings/usage"),
             "claude" => Some("https://claude.ai/settings/usage"),
             "grok" => Some("https://grok.com"),
